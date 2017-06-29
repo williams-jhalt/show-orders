@@ -1,0 +1,37 @@
+{% extends 'admin.html.twig' %}
+
+{% block body %}
+
+    <div class="row">
+
+        <div class="col-sm-12">
+
+            <div class="pull-right">
+
+                {{ form_start(delete_form) }}
+                <input class="btn btn-danger" type="submit" value="Delete">
+                {{ form_end(delete_form) }}
+
+            </div>
+
+            <h1>Customer edit</h1>
+
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-sm-12">
+
+            {{ form_start(edit_form) }}
+            {{ form_widget(edit_form) }}
+            <input class="btn btn-primary" type="submit" value="Edit" />
+            <a class="btn btn-default" href="{{ path('customer_index') }}">Cancel</a>
+            {{ form_end(edit_form) }}
+
+        </div>
+
+    </div>
+
+{% endblock %}

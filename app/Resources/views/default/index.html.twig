@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    {% if customer %}
+
+        <div class="row">
+
+            {% for vendor in vendors %}
+                <div class="col-md-4 col-sm-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a href="{{ path('vendor_order_sheet', {id:vendor.id}) }}">
+                                <h3>{{ vendor.company }}</h3>
+                            </a>
+                        </div>
+                        <div class="panel-body">
+                            <a href="{{ path('vendor_order_sheet', {id: vendor.id}) }}">
+                                <img src="{{ asset('uploads/vendors/' ~ vendor.imageUrl) }}" class="col-sm-12 img-responsive">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+
+        <div class="row">
+            <div class="col-sm-3"></div>
+            <div class="col-sm-6 text-center">
+
+                <form class="form-inline" action="{{ path('set_customer_number') }}" method="post">
+                    <sup>If you do not know your customer, please ask a sales representative</sup><br>
+                    <input class="form-control" type="text" name="customerNumber" placeholder="Customer Number">
+                    <button class="btn btn-default" type="submit">Start Ordering</button>
+                </form>
+
+            </div>
+
+            <div class="col-sm-3"></div>
+        </div>
+
+    {% endif %}
+
+{% endblock %}

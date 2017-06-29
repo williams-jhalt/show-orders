@@ -1,0 +1,43 @@
+{% extends 'admin.html.twig' %}
+
+{% block body %}
+
+    <div class="pull-right">         
+        {{ form_start(delete_form) }}
+        <input class="btn btn-danger" type="submit" value="Delete">
+        {{ form_end(delete_form) }}
+    </div>
+    
+    <h1>Customer</h1>
+
+    <table class="table table-condensed">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ customer.id }}</td>
+            </tr>
+            <tr>
+                <th>Customernumber</th>
+                <td>{{ customer.customerNumber }}</td>
+            </tr>
+            <tr>
+                <th>Company</th>
+                <td>{{ customer.company }}</td>
+            </tr>
+            <tr>
+                <th>Firstname</th>
+                <td>{{ customer.firstName }}</td>
+            </tr>
+            <tr>
+                <th>Lastname</th>
+                <td>{{ customer.lastName }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>
+        <a class="btn btn-default" href="{{ path('customer_index') }}"><i class="glyphicon glyphicon-arrow-left"></i> Back</a>
+        <a class="btn btn-default" href="{{ path('customer_edit', { 'id': customer.id }) }}"><i class="glyphicon glyphicon-pencil"></i> Edit</a>   
+    </p>
+
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'admin.html.twig' %}
+
+{% block body %}
+
+    <div class="pull-right">         
+        {{ form_start(delete_form) }}
+        <input class="btn btn-danger" type="submit" value="Delete">
+        {{ form_end(delete_form) }}
+    </div>
+    
+    <h1>Product</h1>
+
+    <table class="table table-condensed">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ product.id }}</td>
+            </tr>
+            <tr>
+                <th>Itemnumber</th>
+                <td>{{ product.itemNumber }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>
+        <a class="btn btn-default" href="{{ path('product_index') }}"><i class="glyphicon glyphicon-arrow-left"></i> Back</a>
+        <a class="btn btn-default" href="{{ path('product_edit', { 'id': product.id }) }}"><i class="glyphicon glyphicon-pencil"></i> Edit</a>   
+    </p>
+{% endblock %}

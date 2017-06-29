@@ -1,0 +1,15 @@
+{% extends 'admin.html.twig' %}
+
+{% block body %}
+    <h1>Product Import</h1>
+
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <input class="btn btn-primary" type="submit" value="Import" />
+    {{ form_end(form) }}
+    
+    <br>
+
+    <p><a class="btn btn-default" href="{{ path('product_index') }}"><i class="glyphicon glyphicon-arrow-left"></i> Back to List</a></p>
+        
+{% endblock %}

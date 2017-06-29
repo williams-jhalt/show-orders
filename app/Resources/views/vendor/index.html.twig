@@ -1,0 +1,31 @@
+{% extends 'admin.html.twig' %}
+
+{% block body %}
+    <h1>Vendors</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Vendor Number</th>
+                <th>Company</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for vendor in vendors %}
+                <tr>
+                    <td><a href="{{ path('vendor_show', { 'id': vendor.id }) }}">{{ vendor.vendorNumber }}</td>
+                    <td>{{ vendor.company }}</td>
+                    <td>
+                        <a class="btn btn-sm btn-default" href="{{ path('vendor_edit', { 'id': vendor.id }) }}">edit</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <p>
+        <a class="btn btn-primary" href="{{ path('vendor_new') }}">Create a new vendor</a>
+    </p>
+
+{% endblock %}
