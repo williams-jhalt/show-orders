@@ -49,10 +49,13 @@ class VendorController extends Controller {
 
             $file = $vendor->getImageUrl();
 
-            $filename = md5(uniqid()) . $file->guessExtension();
-            $file->move($this->getParameter('vendor_image_dir'), $filename);
+            if ($file !== null) {
+                $filename = md5(uniqid()) . $file->guessExtension();
 
-            $vendor->setImageUrl($filename);
+                if ($file->move($this->getParameter('vendor_image_dir'), $filename)) {
+                    $vendor->setImageUrl($filename);
+                }
+            }
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($vendor);
@@ -100,13 +103,13 @@ class VendorController extends Controller {
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
 
-            if (is_a($vendor->getImageUrl(), 'Symfony\Component\HttpFoundation\File\UploadedFile')) {
-                $file = $vendor->getImageUrl();
+            $file = $vendor->getImageUrl();
 
+            if ($file !== null) {
                 $filename = md5(uniqid()) . $file->guessExtension();
-                $file->move($this->getParameter('vendor_image_dir'), $filename);
-
-                $vendor->setImageUrl($filename);
+                if ($file->move($this->getParameter('vendor_image_dir'), $filename)) {
+                    $vendor->setImageUrl($filename);
+                }
             }
 
             $em = $this->getDoctrine()->getManager();

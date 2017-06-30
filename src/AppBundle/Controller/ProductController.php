@@ -25,13 +25,23 @@ class ProductController extends Controller {
      * @Route("/", name="product_index")
      * @Method("GET")
      */
-    public function indexAction() {
+    public function indexAction(Request $request) {
+
+        $vendorId = $request->get('vendor', null);
+
         $em = $this->getDoctrine()->getManager();
 
-        $products = $em->getRepository('AppBundle:Product')->findAll();
+        if (!empty($vendorId)) {
+            $vendor = $em->getRepository('AppBundle:Vendor')->find($vendorId);
+            $products = $em->getRepository('AppBundle:Product')->findByVendor($vendor);
+        } else {
+            $products = $em->getRepository('AppBundle:Product')->findAll();
+        }
+        $vendors = $em->getRepository('AppBundle:Vendor')->findAll();
 
         return $this->render('product/index.html.twig', array(
                     'products' => $products,
+                    'vendors' => $vendors
         ));
     }
 
@@ -42,6 +52,7 @@ class ProductController extends Controller {
      * 
      * sku
      * name
+     * price
      * vendor
      * 
      */
@@ -59,29 +70,35 @@ class ProductController extends Controller {
 
             while (!$file->eof()) {
                 $row = $file->fgetcsv();
-                
-                if (count($row) != 3) {
+
+                if (count($row) != 4) {
                     continue;
                 }
                 
-                $product = $em->getRepository('AppBundle:Product')->findOneByItemNumber($row[0]);
+                $sku = trim($row[0]);
+                $name = trim($row[1]);
+                $price = trim($row[2]);
+                $vendorId = trim($row[3]);
+
+                $product = $em->getRepository('AppBundle:Product')->findOneByItemNumber($sku);
                 if ($product === null) {
                     $product = new Product();
-                    $product->setItemNumber($row[0]);
+                    $product->setItemNumber($sku);
                 }
-                
-                $vendor = $em->getRepository('AppBundle:Vendor')->findOneByVendorNumber($row[2]);
+
+                $vendor = $em->getRepository('AppBundle:Vendor')->findOneByVendorNumber($vendorId);
                 if ($vendor === null) {
                     $vendor = new Vendor();
-                    $vendor->setVendorNumber($row[2]);
-                    $vendor->setCompany($row[2]);
+                    $vendor->setVendorNumber($vendorId);
+                    $vendor->setCompany($vendorId);
                     $em->persist($vendor);
                     $em->flush($vendor);
                 }
-                
-                $product->setName($row[1]);
+
+                $product->setName($name);
+                $product->setPrice($price);
                 $product->setVendor($vendor);
-                
+
                 $em->persist($product);
             }
 

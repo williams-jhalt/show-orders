@@ -37,6 +37,13 @@ class Product {
     private $name;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="price", type="decimal")
+     */
+    private $price;
+
+    /**
      *
      * @var Vendor
      * 
@@ -114,6 +121,15 @@ class Product {
 
     public function setImageUrl($imageUrl) {
         $this->imageUrl = $imageUrl;
+        return $this;
+    }
+
+    public function getPrice() {
+        return $this->price;
+    }
+
+    public function setPrice($price) {
+        $this->price = $price;
         return $this;
     }
 

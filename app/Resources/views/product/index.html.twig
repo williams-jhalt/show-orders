@@ -2,38 +2,44 @@
 
 {% block body %}
     <h1>Products list</h1>
+    
+    <form class="form-inline" action="{{ path('product_index') }}" method="get">
+        <select class="form-control" name="vendor" onchange="this.form.submit();">
+            <option value="">All Vendors</option>
+            {% for vendor in vendors %}
+                <option {% if app.request.get('vendor') == vendor.id %}selected{% endif %} value="{{ vendor.id }}">{{ vendor.company }}</option>
+            {% endfor %}
+        </select>
+    </form>
 
     <table class="table">
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Itemnumber</th>
+                <th>SKU</th>
+                <th>Name</th>
+                <th>Price</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-        {% for product in products %}
-            <tr>
-                <td><a href="{{ path('product_show', { 'id': product.id }) }}">{{ product.id }}</a></td>
-                <td>{{ product.itemNumber }}</td>
-                <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('product_show', { 'id': product.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('product_edit', { 'id': product.id }) }}">edit</a>
-                        </li>
-                    </ul>
-                </td>
-            </tr>
-        {% endfor %}
+            {% for product in products %}
+                <tr>
+                    <td><a href="{{ path('product_show', { 'id': product.id }) }}">{{ product.id }}</a></td>
+                    <td>{{ product.itemNumber }}</td>
+                    <td>{{ product.name }}</td>
+                    <td>${{ product.price|number_format(2) }}</td>
+                    <td>
+                        <a class="btn btn-default btn-sm" href="{{ path('product_edit', { 'id': product.id }) }}">edit</a>
+                    </td>
+                </tr>
+            {% endfor %}
         </tbody>
     </table>
 
-        <p>
-            <a class="btn btn-primary" href="{{ path('product_new') }}">Create a New Product</a>
-            <a class="btn btn-default" href="{{ path('product_import') }}">Import Products</a>
-        </p>
-            
+    <p>
+        <a class="btn btn-primary" href="{{ path('product_new') }}">Create a New Product</a>
+        <a class="btn btn-default" href="{{ path('product_import') }}">Import Products</a>
+    </p>
+
 {% endblock %}

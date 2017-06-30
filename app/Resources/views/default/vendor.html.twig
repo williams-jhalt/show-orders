@@ -33,6 +33,7 @@
                     <th>Image</th>
                     <th>Item Number</th>
                     <th>Name</th>
+                    <th>Price</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -42,6 +43,7 @@
                         <td><img src="{{ asset('uploads/products/' ~ item.imageUrl) }}" style="max-height:100px;">
                         <td style="vertical-align:middle;">{{ item.itemNumber }}</td>
                         <td style="vertical-align:middle;">{{ item.name }}</td>
+                        <td style="vertical-align:middle;" class="text-right">${{ item.price|number_format(2) }}</td>
                         <td style="vertical-align:middle;">
                             {% if checkCart(item) %}
                                 Item in Cart
@@ -72,6 +74,9 @@
 
                         <div class="panel-body">
                             <img src="{{ asset('uploads/products/' ~ item.imageUrl) }}" class="col-sm-12 img-responsive">
+                            <table class="table table-condensed">
+                                <tr><th>Price</th><td>${{ item.price|number_format(2) }}</td></tr>
+                            </table>
                         </div>
 
                         <div class="panel-footer text-center" style="min-height:4em;">
