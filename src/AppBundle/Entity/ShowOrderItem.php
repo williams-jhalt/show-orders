@@ -40,7 +40,7 @@ class ShowOrderItem {
      *
      * @var ShowOrder
      * 
-     * @ORM\ManyToOne(targetEntity="ShowOrder", inversedBy="items")
+     * @ORM\ManyToOne(targetEntity="ShowOrder", inversedBy="items", cascade={"persist"})
      */
     private $showOrder;
 
