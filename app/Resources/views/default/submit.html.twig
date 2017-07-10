@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <h1>Submit Order</h1>
+
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <div class="pull-right">
+        <button class="btn btn-danger" type="submit">Submit Your Order</button>
+        <a class="btn btn-default" href="{{ path('cart') }}">Cancel</a>
+    </div>
+    {{ form_end(form) }}
+
+{% endblock %}

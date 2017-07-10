@@ -2,10 +2,19 @@
 
 {% block javascripts %}
     <script type="text/javascript">
-        $('.add-to-cart').on('submit', function() {
+        $('.add-to-cart').on('submit', function () {
             console.log(this);
-            var form = $(this);            
-            $.get(form.attr('action'), form.serialize(), function(data) {
+            var form = $(this);
+            $.get(form.attr('action'), form.serialize(), function (data) {
+                form.html(data);
+            });
+            form.html("Loading...");
+            return false;
+        });
+        $('.update-cart').on('submit', function () {
+            console.log(this);
+            var form = $(this);
+            $.get(form.attr('action'), form.serialize(), function (data) {
                 form.html(data);
             });
             form.html("Loading...");
@@ -45,12 +54,28 @@
                         <td style="vertical-align:middle;">{{ item.name }}</td>
                         <td style="vertical-align:middle;" class="text-right">${{ item.price|number_format(2) }}</td>
                         <td style="vertical-align:middle;">
+
                             {% if checkCart(item) %}
-                                Item in Cart
+                                <form class="form-inline update-cart" action="{{ path('update_cart_inline', {id: item.id}) }}" method="get">
+                                    <div class="row">
+                                        <div class="col-xs-9">
+                                            <input class="form-control input-sm" type="number" name="quantity" value="{{ checkCart(item) }}">
+                                        </div>
+                                        <div class="col-xs-3">
+                                            <button class="btn btn-sm btn-default" type="submit">Update</button>
+                                        </div>
+                                    </div>
+                                </form>
                             {% else %}
                                 <form class="form-inline add-to-cart" action="{{ path('add_to_cart', {id: item.id}) }}" method="get">
-                                    <input class="form-control input-sm" type="number" name="quantity" value="1">
-                                    <button class="btn btn-sm btn-default" type="submit">Add to Order</button>
+                                    <div class="row">
+                                        <div class="col-xs-9">
+                                            <input class="form-control input-sm" type="number" name="quantity" value="1">
+                                        </div>
+                                        <div class="col-xs-3">
+                                            <button class="btn btn-sm btn-default" type="submit">Add to Order</button>
+                                        </div>
+                                    </div>
                                 </form>
                             {% endif %}
                         </td>
@@ -68,23 +93,35 @@
                 <div class="col-sm-4">
                     <div class="panel panel-default">
 
-                        <div class="panel-heading">
+                        <div class="panel-heading" style="height:4em;overflow:hidden;">
                             {{ item.name }}
                         </div>
 
-                        <div class="panel-body">
-                            <img src="{{ asset('uploads/products/' ~ item.imageUrl) }}" class="col-sm-12 img-responsive">
+                        <div class="panel-body text-center">
+                            <img src="{{ asset('uploads/products/' ~ item.imageUrl) }}" style="height:200px;">
                             <table class="table table-condensed">
+                                <tr><th>Item Number</th><td>{{ item.itemNumber }}</td></tr>
                                 <tr><th>Price</th><td>${{ item.price|number_format(2) }}</td></tr>
                             </table>
                         </div>
 
                         <div class="panel-footer text-center" style="min-height:4em;">
                             {% if checkCart(item) %}
-                                Item in Cart
+                                <form class="form-inline update-cart" action="{{ path('update_cart_inline', {id: item.id}) }}" method="get">
+                                    <div class="row">
+                                        <div class="col-xs-9">
+                                            <input class="form-control input-sm" type="number" name="quantity" value="{{ checkCart(item) }}">
+                                        </div>
+                                        <div class="col-xs-3">
+                                            <button class="btn btn-sm btn-default" type="submit">Update</button>
+                                        </div>
+                                    </div>
+                                </form>
                             {% else %}
                                 <form class="form-inline add-to-cart" action="{{ path('add_to_cart', {id: item.id}) }}" method="get">
-                                    <input class="form-control input-sm" type="number" name="quantity" value="1">
+                                    <div class="form-group">
+                                        <input class="form-control input-sm" type="number" name="quantity" value="1">
+                                    </div>
                                     <button class="btn btn-sm btn-default" type="submit">Add to Order</button>
                                 </form>
                             {% endif %}

@@ -23,20 +23,25 @@
                 </div>
 
                 <!-- Collect the nav links, forms, and other content for toggling -->
-                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                    <ul class="nav navbar-nav">
-                        <li><a href="{{ path('cart') }}">Review Order</a></li>
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right">
-                        {% if app.request.cookies.get('customerNumber') %}
+                {% if app.request.cookies.get('customerNumber') %}
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <ul class="nav navbar-nav">
+                            <li><a href="{{ path('cart') }}"><i class="glyphicon glyphicon-shopping-cart"></i></a></li>
+                        </ul>
+                        <ul class="nav navbar-nav navbar-right">
                             <li><a href="{{ path('clear_customer_number') }}">{{ app.request.cookies.get('customerNumber') }}</a></li>
-                        {% endif %}
-                    </ul>
-                </div><!-- /.navbar-collapse -->
+                        </ul>
+                    </div><!-- /.navbar-collapse -->
+                {% endif %}
             </div><!-- /.container-fluid -->
         </nav>
 
-        <div class="container">{% block body %}{% endblock %}</div>
+        <div class="container">
+            {% if app.request.cookies.get('customerNumber') and getShowOrder() and getShowOrder().submitted %}
+                <div class="alert alert-warning">This order has been submitted, contact a representative if you need to make furthur changes.</div>        
+            {% endif %}
+            {% block body %}{% endblock %}
+        </div>
 
         <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>

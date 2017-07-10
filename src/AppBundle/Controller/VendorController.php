@@ -55,6 +55,8 @@ class VendorController extends Controller {
                 if ($file->move($this->getParameter('vendor_image_dir'), $filename)) {
                     $vendor->setImageUrl($filename);
                 }
+            } else {
+                $vendor->setImageUrl(Vendor::DEFAULT_IMAGE);
             }
 
             $em = $this->getDoctrine()->getManager();
@@ -91,9 +93,13 @@ class VendorController extends Controller {
      * @Route("/{id}/edit", name="vendor_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Vendor $vendor) {
+    public function editAction($id, Request $request) {
 
-        if (!empty($vendor->getImageUrl())) {
+        $vendor = $this->getDoctrine()->getRepository('AppBundle:Vendor')->find($id);
+
+        $existingFilename = $vendor->getImageUrl();
+
+        if (!empty($existingFilename)) {
             $vendor->setImageUrl(new File($this->getParameter('vendor_image_dir') . '/' . $vendor->getImageUrl()));
         }
 
@@ -110,6 +116,8 @@ class VendorController extends Controller {
                 if ($file->move($this->getParameter('vendor_image_dir'), $filename)) {
                     $vendor->setImageUrl($filename);
                 }
+            } else {
+                $vendor->setImageUrl($existingFilename);
             }
 
             $em = $this->getDoctrine()->getManager();

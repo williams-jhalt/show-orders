@@ -17,6 +17,18 @@ class ShowOrderService {
     public function __construct(EntityManager $em) {
         $this->em = $em;
     }
+    
+    public function getShowOrder($customerNumber) {
+        
+        $customer = $this->em->getRepository('AppBundle:Customer')->findOneByCustomerNumber($customerNumber);
+        
+        if ($customer) {
+            return $customer->getShowOrder();            
+        }
+        
+        return null;
+        
+    }
 
     public function addProductToCart($customerNumber, Product $product, $quantity = 1) {
 
@@ -58,7 +70,7 @@ class ShowOrderService {
 
             foreach ($showOrder->getItems() as $item) {
                 if ($item->getProduct() == $product) {
-                    return true;
+                    return $item->getQuantity();
                 }
             }
         }

@@ -14,9 +14,9 @@
                                 <h3>{{ vendor.company }}</h3>
                             </a>
                         </div>
-                        <div class="panel-body">
+                        <div class="panel-body text-center">
                             <a href="{{ path('vendor_order_sheet', {id: vendor.id}) }}">
-                                <img src="{{ asset('uploads/vendors/' ~ vendor.imageUrl) }}" class="col-sm-12 img-responsive">
+                                <img src="{{ asset('uploads/vendors/' ~ vendor.imageUrl) }}" style="height:200px;">
                             </a>
                         </div>
                     </div>
@@ -26,6 +26,12 @@
         </div>
 
     {% else %}
+        
+        {% for message in app.flashes('notice') %}
+            <div class="alert alert-danger">
+                {{ message }}
+            </div>
+        {% endfor %}
 
         <div class="row">
             <div class="col-sm-3"></div>

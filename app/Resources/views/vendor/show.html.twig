@@ -7,8 +7,10 @@
         <input class="btn btn-danger" type="submit" value="Delete">
         {{ form_end(delete_form) }}
     </div>
-    
+
     <h1>Vendor</h1>
+    
+    <img src="{{ asset('uploads/vendors/' ~ vendor.imageUrl) }}">
 
     <table class="table table-condensed">
         <tbody>

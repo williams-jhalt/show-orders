@@ -12,6 +12,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="AppBundle\Repository\VendorRepository")
  */
 class Vendor {
+    
+    const DEFAULT_IMAGE = 'default_vendor.png';
 
     /**
      * @var int
@@ -41,7 +43,7 @@ class Vendor {
      *
      * @ORM\Column(name="imageUrl", type="string", length=255)
      */
-    private $imageUrl = "default_vendor.png";
+    private $imageUrl = self::DEFAULT_IMAGE;
 
     /**
      *

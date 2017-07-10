@@ -31,6 +31,20 @@ class ShowOrder {
     private $customer;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="notes", type="text", nullable=true)
+     */
+    private $notes;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="submitted", type="boolean")
+     */
+    private $submitted = false;
+
+    /**
      *
      * @var ArrayCollection
      * 
@@ -66,6 +80,24 @@ class ShowOrder {
 
     public function setItems(ArrayCollection $items) {
         $this->items = $items;
+        return $this;
+    }
+
+    public function getNotes() {
+        return $this->notes;
+    }
+
+    public function setNotes($notes) {
+        $this->notes = $notes;
+        return $this;
+    }
+
+    public function getSubmitted() {
+        return $this->submitted;
+    }
+
+    public function setSubmitted($submitted) {
+        $this->submitted = $submitted;
         return $this;
     }
 

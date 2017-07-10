@@ -28,7 +28,8 @@ class AppExtension extends Twig_Extension {
     
     public function getFunctions() {
         return [
-            new Twig_SimpleFunction('checkCart', array($this, 'checkCart'))
+            new Twig_SimpleFunction('checkCart', array($this, 'checkCart')),
+            new Twig_SimpleFunction('getShowOrder', array($this, 'getShowOrder'))
         ];
     }
     
@@ -37,6 +38,14 @@ class AppExtension extends Twig_Extension {
         $request = $this->requestStack->getCurrentRequest();
         $customerNumber = $request->cookies->get('customerNumber');
         return $this->service->checkCart($customerNumber, $product);
+        
+    }
+    
+    public function getShowOrder() {
+        
+        $request = $this->requestStack->getCurrentRequest();
+        $customerNumber = $request->cookies->get('customerNumber');
+        return $this->service->getShowOrder($customerNumber);
         
     }
     

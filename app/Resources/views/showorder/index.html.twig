@@ -7,6 +7,8 @@
         <thead>
             <tr>
                 <th>Id</th>
+                <th>Customer</th>
+                <th>Submitted</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -14,6 +16,14 @@
             {% for showOrder in showOrders %}
                 <tr>
                     <td><a href="{{ path('showorder_show', { 'id': showOrder.id }) }}">{{ showOrder.id }}</a></td>
+                    <td>{{ showOrder.customer.customerNumber }}</td>
+                    <td>
+                        {% if showOrder.submitted %}
+                            <i class="glyphicon glyphicon-ok"></i>
+                        {% else %}
+                            <i class="glyphicon glyphicon-remove"></i>
+                        {% endif %}
+                    </td>
                     <td>
                         <a class="btn btn-sm btn-default" href="{{ path('showorder_edit', { 'id': showOrder.id }) }}">edit</a>
                     </td>

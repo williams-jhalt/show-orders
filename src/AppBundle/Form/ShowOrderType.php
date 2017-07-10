@@ -13,7 +13,7 @@ class ShowOrderType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('customer');
+        $builder->add('notes')->add('submitted');
     }
     
     /**
