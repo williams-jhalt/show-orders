@@ -12,11 +12,11 @@
         <tbody>
             <tr>
                 <th>Current Vendor Total:</th>
-                <td>{{ currentVendorTotal }}</td>
+                <td>${{ currentVendorTotal|number_format(2) }}</td>
             </tr>
             <tr>
                 <th>Combined Total:</th>
-                <td>{{ combinedTotal }}</td>
+                <td>${{ combinedTotal|number_format(2) }}</td>
             </tr>
         </tbody>
     </table>
@@ -38,19 +38,16 @@
                     <td>{{ item.product.vendor.vendorNumber }}</td>
                     <td>
                         <form class="form-inline" action="{{ path('update_cart') }}" method="post">
-                            <div class="row">
-                                <div class="col-xs-6">
-                                <input class="form-control input-sm" type="number" name="quantity[{{item.id}}]" value="{{ item.quantity }}">
-                                </div>
-                                <div class="col-xs-6">
-                                <button class="btn btn-default btn-sm" type="submit">Update</button>
-                                </div>
-                            </div>
+                            <input class="form-control input-sm" type="number" name="quantity[{{item.id}}]" value="{{ item.quantity }}">
+                            <button class="btn btn-default btn-sm" type="submit">Update</button>
+                            <a class="btn btn-danger" href="{{ path('delete_cart_item', {id: item.id}) }}">Remove</a>
                         </form>
                     </td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
+
+
 
 {% endblock %}

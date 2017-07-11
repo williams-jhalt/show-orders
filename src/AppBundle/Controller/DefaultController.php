@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\ShowOrder;
+use AppBundle\Entity\ShowOrderItem;
 use AppBundle\Service\ShowOrderService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
@@ -216,7 +217,7 @@ class DefaultController extends Controller {
     /**
      * @Route("/submit-order", name="submit_order")
      */
-    public function submitOrder(Request $request) {
+    public function submitOrderAction(Request $request) {
         
         $customerNumber = $request->cookies->get('customerNumber');
         
@@ -249,6 +250,25 @@ class DefaultController extends Controller {
         return $this->render('default/submit.html.twig', [
             'form' => $form->createView()
         ]);
+        
+    }
+    
+    /**
+     * @Route("/delete-cart-item/{id}", name="delete_cart_item")
+     */
+    public function deleteCartItemAction(ShowOrderItem $item, Request $request) {  
+        
+        $customerNumber = $request->cookies->get('customerNumber');      
+        
+        $customer = $this->getDoctrine()->getRepository('AppBundle:Customer')->findOneByCustomerNumber($customerNumber);      
+        
+        if ($item->getShowOrder()->getCustomer() == $customer) {
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($item);
+            $em->flush();
+        }
+        
+        return $this->redirectToRoute('cart');
         
     }
 

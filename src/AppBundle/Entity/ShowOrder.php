@@ -100,5 +100,13 @@ class ShowOrder {
         $this->submitted = $submitted;
         return $this;
     }
+    
+    public function orderTotal() {
+        $total = 0.0;
+        foreach ($this->items as $item) {
+            $total += $item->getProduct()->getPrice() * $item->getQuantity();
+        }
+        return $total;
+    }
 
 }

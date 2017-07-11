@@ -88,7 +88,7 @@ class ShowOrderController extends Controller
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('showorder_edit', array('id' => $showOrder->getId()));
+            return $this->redirectToRoute('showorder_show', array('id' => $showOrder->getId()));
         }
 
         return $this->render('showorder/edit.html.twig', array(

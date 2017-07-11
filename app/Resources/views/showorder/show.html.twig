@@ -1,28 +1,29 @@
 {% extends 'admin.html.twig' %}
 
 {% block body %}
+
+    <div class="pull-right">
+
+        {{ form_start(delete_form) }}
+        <input class="btn btn-danger" type="submit" value="Delete">
+        {{ form_end(delete_form) }}
+
+    </div>
+
     <h1>Showorder</h1>
 
-    <table>
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ showOrder.id }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <dl class="dl-horizontal">
+        <dt>ID</dt>
+        <dd>{{ showOrder.id }}</dd>
+        <dt>Customer</dt>
+        <dd>{{ showOrder.customer.company }}</dd>
+        <dt>Order Total</dt>
+        <dd>${{ showOrder.orderTotal|number_format(2) }}</dd>
+    </dl>
 
-    <ul>
-        <li>
-            <a href="{{ path('showorder_index') }}">Back to the list</a>
-        </li>
-        <li>
-            <a href="{{ path('showorder_edit', { 'id': showOrder.id }) }}">Edit</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
+    <p>
+        <a class="btn btn-default" href="{{ path('showorder_index') }}"><i class="glyphicon glyphicon-arrow-left"></i> Back</a>
+        <a class="btn btn-default" href="{{ path('showorder_edit', { 'id': showOrder.id }) }}"><i class="glyphicon glyphicon-pencil"></i> Edit</a>   
+    </p>
+
 {% endblock %}

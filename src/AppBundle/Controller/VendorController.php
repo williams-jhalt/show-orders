@@ -42,6 +42,13 @@ class VendorController extends Controller {
      */
     public function newAction(Request $request) {
         $vendor = new Vendor();
+
+        $existingFilename = $vendor->getImageUrl();
+
+        if (!empty($existingFilename)) {
+            $vendor->setImageUrl(new File($this->getParameter('vendor_image_dir') . '/' . $vendor->getImageUrl()));
+        }
+        
         $form = $this->createForm('AppBundle\Form\VendorType', $vendor);
         $form->handleRequest($request);
 
