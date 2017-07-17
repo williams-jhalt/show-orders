@@ -7,9 +7,9 @@ use AppBundle\Entity\Vendor;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -26,18 +26,19 @@ class ProductController extends Controller {
      * @Method("GET")
      */
     public function indexAction(Request $request) {
-
-        $vendorId = $request->get('vendor', null);
-
         $em = $this->getDoctrine()->getManager();
-
-        if (!empty($vendorId)) {
+        
+        $vendorId = $request->get('vendor');
+        
+        $options = [];
+        
+        if ($vendorId !== null) {
             $vendor = $em->getRepository('AppBundle:Vendor')->find($vendorId);
-            $products = $em->getRepository('AppBundle:Product')->findByVendor($vendor);
-        } else {
-            $products = $em->getRepository('AppBundle:Product')->findAll();
+            $options['vendor'] = $vendor;
         }
-        $vendors = $em->getRepository('AppBundle:Vendor')->findAll();
+
+        $products = $em->getRepository('AppBundle:Product')->findBy($options, ['itemNumber' => 'asc']);
+        $vendors = $em->getRepository('AppBundle:Vendor')->findBy([], ['company' => 'asc']);
 
         return $this->render('product/index.html.twig', array(
                     'products' => $products,
@@ -119,14 +120,32 @@ class ProductController extends Controller {
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
-
         $product = new Product();
+
+        $existingFilename = $product->getImageUrl();
+
+        if (!empty($existingFilename)) {
+            $product->setImageUrl(new File($this->getParameter('product_image_dir') . '/' . $product->getImageUrl()));
+        }
 
         $form = $this->createForm('AppBundle\Form\ProductType', $product);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $file = $product->getImageUrl();
+
+            if ($file !== null) {
+                $filename = md5(uniqid()) . $file->guessExtension();
+
+                if ($file->move($this->getParameter('product_image_dir'), $filename)) {
+                    $product->setImageUrl($filename);
+                }
+            } else {
+                $product->setImageUrl(Product::DEFAULT_IMAGE);
+            }
+
+            $em = $this->getDoctrine()->getManager();
             $em->persist($product);
             $em->flush();
 
@@ -146,7 +165,6 @@ class ProductController extends Controller {
      * @Method("GET")
      */
     public function showAction(Product $product) {
-
         $deleteForm = $this->createDeleteForm($product);
 
         return $this->render('product/show.html.twig', array(
@@ -161,15 +179,38 @@ class ProductController extends Controller {
      * @Route("/{id}/edit", name="product_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Product $product) {
+    public function editAction($id, Request $request) {
+
+        $product = $this->getDoctrine()->getRepository('AppBundle:Product')->find($id);
+
+        $existingFilename = $product->getImageUrl();
+
+        if (!empty($existingFilename)) {
+            $product->setImageUrl(new File($this->getParameter('product_image_dir') . '/' . $product->getImageUrl()));
+        }
+
         $deleteForm = $this->createDeleteForm($product);
         $editForm = $this->createForm('AppBundle\Form\ProductType', $product);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('product_edit', array('id' => $product->getId()));
+            $file = $product->getImageUrl();
+
+            if ($file !== null) {
+                $filename = md5(uniqid()) . $file->guessExtension();
+                if ($file->move($this->getParameter('product_image_dir'), $filename)) {
+                    $product->setImageUrl($filename);
+                }
+            } else {
+                $product->setImageUrl($existingFilename);
+            }
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($product);
+            $em->flush();
+
+            return $this->redirectToRoute('product_show', array('id' => $product->getId()));
         }
 
         return $this->render('product/edit.html.twig', array(
@@ -211,14 +252,6 @@ class ProductController extends Controller {
                         ->setMethod('DELETE')
                         ->getForm()
         ;
-    }
-
-    private function createImportForm() {
-        return $this->createFormBuilder()
-                        ->setAction($this->generateUrl('product_import'))
-                        ->setMethod('POST')
-                        ->add('importFile', FileType::class)
-                        ->getForm();
     }
 
 }

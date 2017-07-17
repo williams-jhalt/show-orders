@@ -14,9 +14,9 @@
                                 <h3>{{ vendor.company }}</h3>
                             </a>
                         </div>
-                        <div class="panel-body text-center">
+                        <div class="panel-body">
                             <a href="{{ path('vendor_order_sheet', {id: vendor.id}) }}">
-                                <img src="{{ asset('uploads/vendors/' ~ vendor.imageUrl) }}" style="height:200px;">
+                                <img src="{{ asset('uploads/vendors/' ~ vendor.imageUrl) }}" class="img-responsive" style="margin-left: auto; margin-right: auto;">
                             </a>
                         </div>
                     </div>

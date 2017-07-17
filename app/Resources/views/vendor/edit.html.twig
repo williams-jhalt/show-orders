@@ -9,6 +9,8 @@
     </div>
 
     <h1>Vendor edit</h1>
+    
+    <img src="{{ asset('uploads/vendors/' ~ vendor.imageUrl) }}">
 
     {{ form_start(edit_form) }}
     {{ form_widget(edit_form) }}

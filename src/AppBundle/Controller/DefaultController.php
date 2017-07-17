@@ -35,7 +35,7 @@ class DefaultController extends Controller {
             $customer = $this->getDoctrine()->getRepository('AppBundle:Customer')->findOneByCustomerNumber($request->cookies->get('customerNumber'));
         }
 
-        $vendors = $this->getDoctrine()->getRepository('AppBundle:Vendor')->findAll();
+        $vendors = $this->getDoctrine()->getRepository('AppBundle:Vendor')->findBy([], ['company' => 'asc']);
 
         // replace this example code with whatever you need
         return $this->render('default/index.html.twig', [

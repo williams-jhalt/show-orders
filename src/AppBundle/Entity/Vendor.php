@@ -127,5 +127,9 @@ class Vendor {
         $this->imageUrl = $imageUrl;
         return $this;
     }
+    
+    public function __toString() {
+        return $this->company;
+    }
 
 }
