@@ -3,31 +3,38 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\ShowOrder;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use SplTempFileObject;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Form;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\File\Stream;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
  * Showorder controller.
  *
  * @Route("/admin/showorder")
  */
-class ShowOrderController extends Controller
-{
+class ShowOrderController extends Controller {
+
     /**
      * Lists all showOrder entities.
      *
      * @Route("/", name="showorder_index")
      * @Method("GET")
      */
-    public function indexAction()
-    {
+    public function indexAction() {
         $em = $this->getDoctrine()->getManager();
 
         $showOrders = $em->getRepository('AppBundle:ShowOrder')->findAll();
 
         return $this->render('showorder/index.html.twig', array(
-            'showOrders' => $showOrders,
+                    'showOrders' => $showOrders,
         ));
     }
 
@@ -37,8 +44,7 @@ class ShowOrderController extends Controller
      * @Route("/new", name="showorder_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request)
-    {
+    public function newAction(Request $request) {
         $showOrder = new Showorder();
         $form = $this->createForm('AppBundle\Form\ShowOrderType', $showOrder);
         $form->handleRequest($request);
@@ -52,8 +58,8 @@ class ShowOrderController extends Controller
         }
 
         return $this->render('showorder/new.html.twig', array(
-            'showOrder' => $showOrder,
-            'form' => $form->createView(),
+                    'showOrder' => $showOrder,
+                    'form' => $form->createView(),
         ));
     }
 
@@ -63,13 +69,12 @@ class ShowOrderController extends Controller
      * @Route("/{id}", name="showorder_show")
      * @Method("GET")
      */
-    public function showAction(ShowOrder $showOrder)
-    {
+    public function showAction(ShowOrder $showOrder) {
         $deleteForm = $this->createDeleteForm($showOrder);
 
         return $this->render('showorder/show.html.twig', array(
-            'showOrder' => $showOrder,
-            'delete_form' => $deleteForm->createView(),
+                    'showOrder' => $showOrder,
+                    'delete_form' => $deleteForm->createView(),
         ));
     }
 
@@ -79,8 +84,7 @@ class ShowOrderController extends Controller
      * @Route("/{id}/edit", name="showorder_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, ShowOrder $showOrder)
-    {
+    public function editAction(Request $request, ShowOrder $showOrder) {
         $deleteForm = $this->createDeleteForm($showOrder);
         $editForm = $this->createForm('AppBundle\Form\ShowOrderType', $showOrder);
         $editForm->handleRequest($request);
@@ -92,9 +96,9 @@ class ShowOrderController extends Controller
         }
 
         return $this->render('showorder/edit.html.twig', array(
-            'showOrder' => $showOrder,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+                    'showOrder' => $showOrder,
+                    'edit_form' => $editForm->createView(),
+                    'delete_form' => $deleteForm->createView(),
         ));
     }
 
@@ -104,8 +108,7 @@ class ShowOrderController extends Controller
      * @Route("/{id}", name="showorder_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, ShowOrder $showOrder)
-    {
+    public function deleteAction(Request $request, ShowOrder $showOrder) {
         $form = $this->createDeleteForm($showOrder);
         $form->handleRequest($request);
 
@@ -123,14 +126,53 @@ class ShowOrderController extends Controller
      *
      * @param ShowOrder $showOrder The showOrder entity
      *
-     * @return \Symfony\Component\Form\Form The form
+     * @return Form The form
      */
-    private function createDeleteForm(ShowOrder $showOrder)
-    {
+    private function createDeleteForm(ShowOrder $showOrder) {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('showorder_delete', array('id' => $showOrder->getId())))
-            ->setMethod('DELETE')
-            ->getForm()
+                        ->setAction($this->generateUrl('showorder_delete', array('id' => $showOrder->getId())))
+                        ->setMethod('DELETE')
+                        ->getForm()
         ;
     }
+
+    /**
+     * @Route("/export/{id}", name="showorder_export")
+     */
+    public function exportAction(ShowOrder $order) {
+                
+        $file = new SplTempFileObject();
+        $file->fputcsv([
+            'sku',
+            'name',
+            'quantity'
+        ]);
+        
+        foreach ($order->getItems() as $item) {
+            $file->fputcsv([
+                $item->getProduct()->getItemNumber(),
+                $item->getProduct()->getName(),
+                $item->getQuantity()
+            ]);
+        }
+        
+        $file->rewind();
+        
+        $response = new StreamedResponse(function() use ($file) {
+            foreach ($file as $line) {
+                echo $line;
+            }
+        });
+        $dispositionHeader = $response->headers->makeDisposition(
+                ResponseHeaderBag::DISPOSITION_ATTACHMENT, 
+                $order->getCustomer()->getCustomerNumber() . "-" . $order->getId() . ".csv"
+        );
+        $response->headers->set('Content-Type', 'text/csv; charset=utf-8');
+        $response->headers->set('Pragma', 'public');
+        $response->headers->set('Cache-Control', 'maxage=1');
+        $response->headers->set('Content-Disposition', $dispositionHeader);
+
+        return $response;
+    }
+
 }

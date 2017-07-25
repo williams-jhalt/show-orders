@@ -7,6 +7,7 @@ use AppBundle\Entity\Vendor;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -252,6 +253,14 @@ class ProductController extends Controller {
                         ->setMethod('DELETE')
                         ->getForm()
         ;
+    }
+
+    private function createImportForm() {
+        return $this->createFormBuilder()
+                        ->setAction($this->generateUrl('product_import'))
+                        ->setMethod('POST')
+                        ->add('importFile', FileType::class)
+                        ->getForm();
     }
 
 }

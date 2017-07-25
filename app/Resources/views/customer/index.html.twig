@@ -1,10 +1,20 @@
 {% extends 'admin.html.twig' %}
 
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#customerTable').DataTable();
+            $('#customerTable').show();
+        });
+    </script>
+{% endblock %}
+
 {% block body %}
 
     <h1>Customers list</h1>
 
-    <table class="table">
+    <table id="customerTable" class="table" style="display:none;">
         <thead>
             <tr>
                 <th>Customer Number</th>

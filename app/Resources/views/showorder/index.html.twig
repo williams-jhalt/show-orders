@@ -1,9 +1,19 @@
 {% extends 'admin.html.twig' %}
 
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#showorderTable').DataTable();
+            $('#showorderTable').show();
+        });
+    </script>
+{% endblock %}
+
 {% block body %}
     <h1>Show Orders</h1>
 
-    <table class="table">
+    <table id="showorderTable" class="table" style="display:none;">
         <thead>
             <tr>
                 <th>Id</th>
@@ -26,6 +36,7 @@
                     </td>
                     <td>
                         <a class="btn btn-sm btn-default" href="{{ path('showorder_edit', { 'id': showOrder.id }) }}">edit</a>
+                        <a class="btn btn-sm btn-default" href="{{ path('showorder_export', { 'id': showOrder.id }) }}">export</a>
                     </td>
                 </tr>
             {% endfor %}

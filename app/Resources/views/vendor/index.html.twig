@@ -1,9 +1,19 @@
 {% extends 'admin.html.twig' %}
 
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#vendorTable').DataTable();
+            $('#vendorTable').show();
+        });
+    </script>
+{% endblock %}
+
 {% block body %}
     <h1>Vendors</h1>
 
-    <table class="table">
+    <table id="vendorTable" class="table" style="display:none;">
         <thead>
             <tr>
                 <th>Vendor Number</th>

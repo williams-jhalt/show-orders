@@ -61,7 +61,7 @@ class DefaultController extends Controller {
             $request->getSession()->set('showAsList', $request->query->get('showAsList'));
         }
         
-        $showAsList = $request->getSession()->get('showAsList', false);
+        $showAsList = $request->getSession()->get('showAsList', true);
         
         $vendor = $this->getDoctrine()->getRepository('AppBundle:Vendor')->find($id);
         
@@ -112,12 +112,14 @@ class DefaultController extends Controller {
      */
     public function addToCartAction($id, Request $request, ShowOrderService $service) {
         
+        $quantity = $request->get('quantity', 1);
+        
         $product = $this->getDoctrine()->getRepository('AppBundle:Product')->find($id);
         
-        $service->addProductToCart($request->cookies->get('customerNumber'), $product, $request->get('quantity', 1));
+        $service->addProductToCart($request->cookies->get('customerNumber'), $product, $quantity);
          
         if ($request->isXmlHttpRequest()) {
-            return new Response('Added to Cart');
+            return new Response($quantity . ' Added to Cart');
         }
         
         return $this->redirectToRoute('vendor_order_sheet', [
@@ -172,19 +174,17 @@ class DefaultController extends Controller {
     /**
      * @Route("/update-cart", name="update_cart")
      */
-    public function updateCartAction(Request $request, EntityManager $em) {
+    public function updateCartAction(Request $request, ShowOrderService $service) {
         
+        $customerNumber = $request->cookies->get('customerNumber');
         $cartItems = $request->get('quantity');
 
-        $repo = $em->getRepository('AppBundle:ShowOrderItem');
+        $repo = $this->getDoctrine()->getRepository('AppBundle:ShowOrderItem');
         
         foreach ($cartItems as $key => $value) {
             $item = $repo->find($key);
-            $item->setQuantity($value);
-            $em->persist($item);
+            $service->addProductToCart($customerNumber, $item->getProduct(), $value);
         }
-        
-        $em->flush();
         
         return $this->redirectToRoute('cart');
         
@@ -193,16 +193,11 @@ class DefaultController extends Controller {
     /**
      * @Route("/update-cart/{id}", name="update_cart_inline")
      */
-    public function updateCartInlineAction($id, Request $request, EntityManager $em) {
+    public function updateCartInlineAction(ShowOrderItem $item, Request $request, ShowOrderService $service) {
         
         $quantity = $request->get('quantity');
-
-        $repo = $em->getRepository('AppBundle:ShowOrderItem');
         
-        $item = $repo->find($id);
-        $item->setQuantity($quantity);
-        $em->persist($item);
-        $em->flush();
+        $service->addProductToCart($request->cookies->get('customerNumber'), $item->getProduct(), $quantity);
         
         if ($request->isXmlHttpRequest()) {
             return new Response($quantity . ' Added to Cart');

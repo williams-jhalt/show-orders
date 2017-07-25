@@ -3,13 +3,45 @@
 {% block body %}
     <h1>Product Import</h1>
 
-    {{ form_start(form) }}
-        {{ form_widget(form) }}
-        <input class="btn btn-primary" type="submit" value="Import" />
-    {{ form_end(form) }}
-    
+    <div class="row">
+        <div class="col-sm-6">
+
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            <input class="btn btn-primary" type="submit" value="Import" />
+            {{ form_end(form) }}
+
+        </div>
+
+        <div class="col-sm-6">
+
+            <p>Uploaded CSV should have the following columns.</p>
+
+            <table class="table">
+                <thead>            
+                    <tr>
+                        <th>1</th>
+                        <th>2</th>
+                        <th>3</th>
+                        <th>4</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>SKU</td>
+                        <td>NAME</td>
+                        <td>PRICE</td>
+                        <td>VENDOR NUMBER</td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+
+    </div>
+
     <br>
 
     <p><a class="btn btn-default" href="{{ path('product_index') }}"><i class="glyphicon glyphicon-arrow-left"></i> Back to List</a></p>
-        
+
 {% endblock %}

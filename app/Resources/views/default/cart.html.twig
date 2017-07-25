@@ -1,5 +1,15 @@
 {% extends 'base.html.twig' %}
 
+{% block javascripts %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('input[type="number"]').on('focus', function() {
+                $(this).select();
+            });
+        });
+    </script>
+{% endblock %}
+
 {% block body %}
 
     {% if not showOrder.submitted %}
@@ -37,11 +47,15 @@
                     <td>{{ item.product.name }}</td>
                     <td>{{ item.product.vendor.vendorNumber }}</td>
                     <td>
-                        <form class="form-inline" action="{{ path('update_cart') }}" method="post">
-                            <input class="form-control input-sm" type="number" name="quantity[{{item.id}}]" value="{{ item.quantity }}">
-                            <button class="btn btn-default btn-sm" type="submit">Update</button>
-                            <a class="btn btn-danger" href="{{ path('delete_cart_item', {id: item.id}) }}">Remove</a>
-                        </form>
+                        {% if showOrder.submitted %}
+                            {{ item.quantity }}
+                        {% else %}
+                            <form class="form-inline" action="{{ path('update_cart') }}" method="post">
+                                <input class="form-control input-sm" type="number" name="quantity[{{item.id}}]" value="{{ item.quantity }}">
+                                <button class="btn btn-default btn-sm" type="submit">Update</button>
+                                <a class="btn btn-danger" href="{{ path('delete_cart_item', {id: item.id}) }}">Remove</a>
+                            </form>
+                        {% endif %}
                     </td>
                 </tr>
             {% endfor %}

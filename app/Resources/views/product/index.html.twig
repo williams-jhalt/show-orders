@@ -1,24 +1,27 @@
 {% extends 'admin.html.twig' %}
 
-{% block body %}
-    <h1>Products list</h1>
-    
-    <form class="form-inline" action="{{ path('product_index') }}" method="get">
-        <select class="form-control" name="vendor" onchange="this.form.submit();">
-            <option value="">All Vendors</option>
-            {% for vendor in vendors %}
-                <option {% if app.request.get('vendor') == vendor.id %}selected{% endif %} value="{{ vendor.id }}">{{ vendor.company }}</option>
-            {% endfor %}
-        </select>
-    </form>
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#productTable').DataTable();
+            $('#productTable').show();
+        });
+    </script>
+{% endblock %}
 
-    <table class="table">
+{% block body %}
+    
+    <h1>Products list</h1>
+
+    <table id="productTable" class="table" style="display:none;">
         <thead>
             <tr>
                 <th>Id</th>
                 <th>SKU</th>
                 <th>Name</th>
                 <th>Price</th>
+                <th>Vendor</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -29,6 +32,7 @@
                     <td>{{ product.itemNumber }}</td>
                     <td>{{ product.name }}</td>
                     <td>${{ product.price|number_format(2) }}</td>
+                    <td>{{ product.vendor.vendorNumber }}</td>
                     <td>
                         <a class="btn btn-default btn-sm" href="{{ path('product_edit', { 'id': product.id }) }}">edit</a>
                     </td>

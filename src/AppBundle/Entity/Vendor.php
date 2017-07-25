@@ -49,7 +49,7 @@ class Vendor {
      *
      * @var ArrayCollection
      * 
-     * @ORM\OneToMany(targetEntity="Product", mappedBy="vendor")
+     * @ORM\OneToMany(targetEntity="Product", mappedBy="vendor", cascade={"persist", "remove"})
      */
     private $products;
 
