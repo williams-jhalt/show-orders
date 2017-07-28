@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Controller;
+namespace AppBundle\Controller\Admin;
 
 use AppBundle\Entity\Customer;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -26,7 +26,7 @@ class CustomerController extends Controller
 
         $customers = $em->getRepository('AppBundle:Customer')->findAll();
 
-        return $this->render('customer/index.html.twig', array(
+        return $this->render('admin/customer/index.html.twig', array(
             'customers' => $customers,
         ));
     }
@@ -51,7 +51,7 @@ class CustomerController extends Controller
             return $this->redirectToRoute('customer_show', array('id' => $customer->getId()));
         }
 
-        return $this->render('customer/new.html.twig', array(
+        return $this->render('admin/customer/new.html.twig', array(
             'customer' => $customer,
             'form' => $form->createView(),
         ));
@@ -67,7 +67,7 @@ class CustomerController extends Controller
     {
         $deleteForm = $this->createDeleteForm($customer);
 
-        return $this->render('customer/show.html.twig', array(
+        return $this->render('admin/customer/show.html.twig', array(
             'customer' => $customer,
             'delete_form' => $deleteForm->createView(),
         ));
@@ -91,7 +91,7 @@ class CustomerController extends Controller
             return $this->redirectToRoute('customer_edit', array('id' => $customer->getId()));
         }
 
-        return $this->render('customer/edit.html.twig', array(
+        return $this->render('admin/customer/edit.html.twig', array(
             'customer' => $customer,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),

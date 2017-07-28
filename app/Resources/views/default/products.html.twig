@@ -1,0 +1,124 @@
+{% extends 'base.html.twig' %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('input[name="quantity"]').on('focus', function () {
+                $(this).select();
+            });
+            $('.update-cart').on('click', function (e) {
+                e.preventDefault();
+                var link = $(this);
+                $.get(link.attr('href'), function (data) {
+                    link.html('<i class="glyphicon glyphicon-ok"></i>');
+                });
+                return false;
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block body %}
+
+    <h1>{{ vendor.company }}</h1>
+
+    <div class="navbar navbar-default">
+        <div class="container-fluid">
+            <a class="btn btn-default navbar-btn {% if showAsList %}active{% endif %}" href="{{ path('vendor_order_sheet', {id: vendor.id, showAsList: true}) }}"><i class="glyphicon glyphicon glyphicon-th-list"></i></a>
+            <a class="btn btn-default navbar-btn {% if not showAsList %}active{% endif %}" href="{{ path('vendor_order_sheet', {id: vendor.id, showAsList: false}) }}"><i class="glyphicon glyphicon glyphicon-th"></i></a>
+        </div>
+    </div>
+
+    {% if showAsList %}
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Image</th>
+                    <th>Item Number</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    {% if not active_customer.showOrder.submitted %}<th>Action</th>{% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in vendor.products %}
+                    <tr>
+                        <td style="vertical-align: middle;">
+                            {% if checkCart(item) %}
+                                <i class="glyphicon glyphicon-ok"></i>
+                            {% endif %}
+                        </td>
+                        <td><img src="{{ image('uploads/products/' ~ item.imageUrl).resize(100,100) }}"></td>
+                        <td style="vertical-align:middle;">{{ item.itemNumber }}</td>
+                        <td style="vertical-align:middle;">{{ item.name }}</td>
+                        <td style="vertical-align:middle;" class="text-right">${{ item.price|number_format(2) }}</td>
+                        {% if not active_customer.showOrder.submitted %}
+                            <td style="vertical-align:middle;">
+                                
+                                {% if checkCart(item.itemNumber) %}
+                                    <a class="btn btn-primary" href="#">
+                                        <i class="glyphicon glyphicon-ok"></i>
+                                    </a>
+                                {% else %}                                
+                                    <a class="btn btn-primary update-cart" href="{{ path('update_cart', {itemNumber: item.itemNumber, quantity: 1}) }}">
+                                        <i class="glyphicon glyphicon-plus"></i>
+                                    </a>      
+                                {% endif %}
+
+                            </td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    {% else %}
+
+        <div class="row">
+
+            {% for item in vendor.products %}
+
+                <div class="col-sm-4">
+                    <div class="panel panel-default">
+
+                        <div class="panel-heading" style="height:4em;overflow:hidden;">
+                            {% if checkCart(item.itemNumber) %}
+                                <i class="glyphicon glyphicon-ok pull-right"></i>
+                            {% endif %}
+                            {{ item.name }}
+                        </div>
+
+                        <div class="panel-body text-center">
+                            <img src="{{ image('uploads/products/' ~ item.imageUrl).resize(200,200) }}">
+                            <table class="table table-condensed">
+                                <tr><th>Item Number</th><td>{{ item.itemNumber }}</td></tr>
+                                <tr><th>Price</th><td>${{ item.price|number_format(2) }}</td></tr>
+                            </table>
+                        </div>
+
+                        {% if not active_customer.showOrder.submitted %}
+
+                            <div class="panel-footer text-center" style="min-height:4em;">
+                                <form class="form-inline update-cart" action="{{ path('update_cart') }}" method="get">
+                                    <input type="hidden" name="itemNumber" value="{{ item.itemNumber }}">
+                                    <div class="form-group">
+                                        <input class="form-control input-sm" type="number" name="quantity" value="{{ checkCart(item.itemNumber) }}">                                      
+                                    </div>
+                                    <button class="btn btn-sm btn-default" type="submit">Update</button>
+                                </form>
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% endif %}
+
+{% endblock %}

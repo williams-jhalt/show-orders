@@ -2,8 +2,11 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Customer;
+use AppBundle\Entity\Product;
 use AppBundle\Entity\ShowOrder;
 use AppBundle\Entity\ShowOrderItem;
+use AppBundle\Entity\Vendor;
 use AppBundle\Service\ShowOrderService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
@@ -23,51 +26,47 @@ class DefaultController extends Controller {
      */
     public function indexAction(Request $request, SessionInterface $session) {
 
+        if ($request->cookies->has('customerNumber')) {
+            return $this->redirectToRoute('list_vendors');
+        }
+
         $form = $this->createFormBuilder()
                 ->setAction($this->generateUrl('set_customer_number'))
                 ->setMethod('POST')
                 ->add('customerNumber', TextType::class)
                 ->getForm();
 
-        $customer = null;
+        return $this->render('default/index.html.twig', [
+                    'form' => $form->createView()
+        ]);
+    }
 
-        if ($request->cookies->has('customerNumber')) {
-            $customer = $this->getDoctrine()->getRepository('AppBundle:Customer')->findOneByCustomerNumber($request->cookies->get('customerNumber'));
-        }
+    /**
+     * @Route("/vendor", name="list_vendors")
+     */
+    public function listVendorsAction() {
 
         $vendors = $this->getDoctrine()->getRepository('AppBundle:Vendor')->findBy([], ['company' => 'asc']);
 
-        // replace this example code with whatever you need
-        return $this->render('default/index.html.twig', [
-                    'form' => $form->createView(),
-                    'customer' => $customer,
+        return $this->render('default/vendors.html.twig', [
                     'vendors' => $vendors
         ]);
     }
-    
-    /**
-     * @Route("/admin", name="admin_homepage")
-     */
-    public function adminAction() {
-        return $this->render('default/admin.html.twig');
-    }
-    
+
     /**
      * @Route("/vendor/{id}", name="vendor_order_sheet")
      */
-    public function vendorOrderSheetAction($id, Request $request) {
-        
+    public function vendorOrderSheetAction(Vendor $vendor, Request $request) {
+
         if ($request->query->has('showAsList')) {
             $request->getSession()->set('showAsList', $request->query->get('showAsList'));
         }
-        
+
         $showAsList = $request->getSession()->get('showAsList', true);
-        
-        $vendor = $this->getDoctrine()->getRepository('AppBundle:Vendor')->find($id);
-        
-        return $this->render('default/vendor.html.twig', [
-            'vendor' => $vendor,
-            'showAsList' => $showAsList
+
+        return $this->render('default/products.html.twig', [
+                    'vendor' => $vendor,
+                    'showAsList' => $showAsList
         ]);
     }
 
@@ -77,9 +76,9 @@ class DefaultController extends Controller {
     public function setCustomerNumber(Request $request) {
 
         $customerNumber = $request->get('customerNumber');
-        
+
         $customer = $this->getDoctrine()->getRepository('AppBundle:Customer')->findOneByCustomerNumber($customerNumber);
-                
+
         $response = new Response();
 
         if ($customer) {
@@ -88,7 +87,7 @@ class DefaultController extends Controller {
             $this->addFlash('notice', 'Customer Not Found');
         }
         $response->setStatusCode(303);
-        $response->headers->set('Location', $this->generateUrl('homepage'));        
+        $response->headers->set('Location', $this->generateUrl('homepage'));
 
         return $response;
     }
@@ -97,174 +96,117 @@ class DefaultController extends Controller {
      * @Route("/clear-customer", name="clear_customer_number")
      */
     public function clearCustomerNumber() {
-        
+
         $response = new Response();
-        
+
         $response->headers->clearCookie('customerNumber');
         $response->setStatusCode(303);
-        $response->headers->set('Location', $this->generateUrl('homepage'));        
+        $response->headers->set('Location', $this->generateUrl('homepage'));
 
         return $response;
     }
-    
+
     /**
      * @Route("/add-to-cart/{id}", name="add_to_cart")
      */
-    public function addToCartAction($id, Request $request, ShowOrderService $service) {
-        
+    public function addToCartAction(Product $product, Request $request, ShowOrderService $service) {
+
         $quantity = $request->get('quantity', 1);
-        
-        $product = $this->getDoctrine()->getRepository('AppBundle:Product')->find($id);
-        
-        $service->addProductToCart($request->cookies->get('customerNumber'), $product, $quantity);
-         
+
+        $service->addProductToCart($this->customer, $product, $quantity);
+
         if ($request->isXmlHttpRequest()) {
             return new Response($quantity . ' Added to Cart');
         }
-        
+
         return $this->redirectToRoute('vendor_order_sheet', [
-            'id' => $product->getVendor()->getId()
+                    'id' => $product->getVendor()->getId()
         ]);
     }
-    
+
     /**
      * @Route("/cart", name="cart")
      */
-    public function cartAction(Request $request) {        
-        
-        $vendorId = $request->get('vendor');
-        
-        $customerNumber = $request->cookies->get('customerNumber');
-        
-        $customer = $this->getDoctrine()->getRepository('AppBundle:Customer')->findOneByCustomerNumber($customerNumber);   
-        
-        $combinedTotal = 0.0;
-        
-        foreach ($customer->getShowOrder()->getItems() as $item) {
-            $combinedTotal += $item->getProduct()->getPrice() * $item->getQuantity();
-        }
-        
-        if (!empty($vendorId)) {
-             
-            $vendor = $this->getDoctrine()->getRepository('AppBundle:Vendor')->find($vendorId);
-            
-            $items = $this->getDoctrine()->getRepository('AppBundle:ShowOrderItem')->findByShowOrderAndVendor($customer->getShowOrder(), $vendor);
-            
-        } else {
-            
-            $items = $customer->getShowOrder()->getItems();
-            
-        }
-        
-        $currentVendorTotal = 0.0;
-        
+    public function cartAction(Request $request, ShowOrderService $service) {
+
+        $items = $service->getItems($request->cookies->get('customerNumber'));
+
+        $total = 0.0;
+
         foreach ($items as $item) {
-            $currentVendorTotal += $item->getProduct()->getPrice() * $item->getQuantity();            
+            $total += $item->getProduct()->getPrice() * $item->getQuantity();
         }
-        
+
         return $this->render('default/cart.html.twig', [
-            'showOrder' => $customer->getShowOrder(),
-            'items' =>$items,
-            'currentVendorTotal' => $currentVendorTotal,
-            'combinedTotal' => $combinedTotal
+                    'items' => $items,
+                    'total' => $total
         ]);
-        
     }
-    
+
     /**
      * @Route("/update-cart", name="update_cart")
      */
     public function updateCartAction(Request $request, ShowOrderService $service) {
-        
-        $customerNumber = $request->cookies->get('customerNumber');
-        $cartItems = $request->get('quantity');
 
-        $repo = $this->getDoctrine()->getRepository('AppBundle:ShowOrderItem');
-        
-        foreach ($cartItems as $key => $value) {
-            $item = $repo->find($key);
-            $service->addProductToCart($customerNumber, $item->getProduct(), $value);
-        }
-        
-        return $this->redirectToRoute('cart');
-        
-    }
-    
-    /**
-     * @Route("/update-cart/{id}", name="update_cart_inline")
-     */
-    public function updateCartInlineAction(ShowOrderItem $item, Request $request, ShowOrderService $service) {
-        
-        $quantity = $request->get('quantity');
-        
-        $service->addProductToCart($request->cookies->get('customerNumber'), $item->getProduct(), $quantity);
-        
+        $itemNumber = $request->get('itemNumber');
+        $quantity = $request->get('quantity', 1);
+
+        $item = $service->addProductToCart($request->cookies->get('customerNumber'), $itemNumber, $quantity);
+
         if ($request->isXmlHttpRequest()) {
             return new Response($quantity . ' Added to Cart');
-        }        
-        
-        return $this->redirectToRoute('vendor_order_sheet', [
-            'id' => $item->getProduct()->getVendor()->getId()
-        ]);
-        
+        }
+
+        return $this->redirectToRoute('cart');
     }
-    
+
     /**
      * @Route("/submit-order", name="submit_order")
      */
     public function submitOrderAction(Request $request) {
-        
-        $customerNumber = $request->cookies->get('customerNumber');
-        
-        $customer = $this->getDoctrine()->getRepository('AppBundle:Customer')->findOneByCustomerNumber($customerNumber);      
-        
-        $showOrder = $customer->getShowOrder();
-        
+
+        $showOrder = $this->customer->getShowOrder();
+
         $form = $this->createFormBuilder($showOrder)
                 ->add('notes', TextareaType::class, [
                     'required' => false,
                     'attr' => ['style' => 'min-height: 10em;']
                 ])
                 ->getForm();
-        
+
         $form->handleRequest($request);
-        
+
         if ($form->isSubmitted() && $form->isValid()) {
-            
+
             $em = $this->getDoctrine()->getManager();
-            
+
             $showOrder->setSubmitted(true);
-            
+
             $em->persist($showOrder);
             $em->flush();
-            
+
             return $this->redirectToRoute('cart');
-            
         }
-        
+
         return $this->render('default/submit.html.twig', [
-            'form' => $form->createView()
+                    'form' => $form->createView()
         ]);
-        
     }
-    
+
     /**
-     * @Route("/delete-cart-item/{id}", name="delete_cart_item")
+     * @Route("/delete-cart-item", name="delete_cart_item")
      */
-    public function deleteCartItemAction(ShowOrderItem $item, Request $request) {  
+    public function deleteCartItemAction(Request $request, ShowOrderService $service) {
         
-        $customerNumber = $request->cookies->get('customerNumber');      
-        
-        $customer = $this->getDoctrine()->getRepository('AppBundle:Customer')->findOneByCustomerNumber($customerNumber);      
-        
-        if ($item->getShowOrder()->getCustomer() == $customer) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($item);
-            $em->flush();
+        $itemNumber = $request->get('itemNumber');
+
+        $service->removeProductFromCart($request->cookies->get('customerNumber'), $itemNumber);
+
+        if ($request->isXmlHttpRequest()) {
+            return new Response($itemNumber . ' Removed from Cart');
         }
-        
+
         return $this->redirectToRoute('cart');
-        
     }
 
 }

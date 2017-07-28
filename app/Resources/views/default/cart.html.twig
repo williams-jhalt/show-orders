@@ -3,8 +3,25 @@
 {% block javascripts %}
     <script type="text/javascript">
         $(document).ready(function () {
-            $('input[type="number"]').on('focus', function() {
+            $('input[type="number"]').on('focus', function () {
                 $(this).select();
+            });
+            $('.update-cart').on('submit', function (e) {
+                e.preventDefault();
+                var form = $(this);
+                $.get(form.attr('action'), form.serialize(), function (data) {
+                   form.append('<i class="glyphicon glyphicon-ok"></i>'); 
+                });
+                return false;
+            });
+            $('.delete-cart-item').on('click', function (e) {
+                e.preventDefault();
+                var link = $(this);
+                $.get(link.attr('href'), function (data) {
+                    console.log(link.parentsUntil('tbody'));
+                   link.parentsUntil('tbody').remove();
+                });
+                return false;
             });
         });
     </script>
@@ -12,7 +29,7 @@
 
 {% block body %}
 
-    {% if not showOrder.submitted %}
+    {% if not active_customer.showOrder.submitted %}
         <a class="btn btn-primary pull-right" href="{{ path('submit_order') }}" onclick="window.confirm('Proceeding to the next step will lock in your order, are you sure?');">Submit Your Order</a>
     {% endif %}
 
@@ -21,12 +38,8 @@
     <table class="table table-condensed">
         <tbody>
             <tr>
-                <th>Current Vendor Total:</th>
-                <td>${{ currentVendorTotal|number_format(2) }}</td>
-            </tr>
-            <tr>
-                <th>Combined Total:</th>
-                <td>${{ combinedTotal|number_format(2) }}</td>
+                <th>Total:</th>
+                <td>${{ total|number_format(2) }}</td>
             </tr>
         </tbody>
     </table>
@@ -47,13 +60,18 @@
                     <td>{{ item.product.name }}</td>
                     <td>{{ item.product.vendor.vendorNumber }}</td>
                     <td>
-                        {% if showOrder.submitted %}
+                        {% if active_customer.showOrder.submitted %}
                             {{ item.quantity }}
                         {% else %}
-                            <form class="form-inline" action="{{ path('update_cart') }}" method="post">
-                                <input class="form-control input-sm" type="number" name="quantity[{{item.id}}]" value="{{ item.quantity }}">
-                                <button class="btn btn-default btn-sm" type="submit">Update</button>
-                                <a class="btn btn-danger" href="{{ path('delete_cart_item', {id: item.id}) }}">Remove</a>
+                            <form class="form-inline text-center update-cart" action="{{ path('update_cart') }}" method="post">
+                                <input type="hidden" name="itemNumber" value="{{ item.product.itemNumber }}">
+                                <div class="input-group">
+                                    <input class="form-control input-sm" type="number" name="quantity" value="{{ item.quantity }}">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default btn-sm" type="submit">Update</button>
+                                        <a class="btn btn-danger btn-sm delete-cart-item" href="{{ path('delete_cart_item', {itemNumber: item.product.itemNumber}) }}" title="Remove item"><i class="glyphicon glyphicon-remove"></i></a>
+                                    </span>
+                                </div>
                             </form>
                         {% endif %}
                     </td>

@@ -52,11 +52,15 @@ class Customer {
 
     /**
      *
-     * @var ArrayCollection
+     * @var ShowOrder
      * 
      * @ORM\OneToOne(targetEntity="ShowOrder", mappedBy="customer")
      */
     private $showOrder;
+    
+    public function __construct() {
+        $this->showOrder = new ShowOrder();
+    }
 
     /**
      * Get id

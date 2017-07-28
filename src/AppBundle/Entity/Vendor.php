@@ -131,5 +131,9 @@ class Vendor {
     public function __toString() {
         return $this->company;
     }
+    
+    public function getImageSet() {
+        return ($this->imageUrl != self::DEFAULT_IMAGE);
+    }
 
 }

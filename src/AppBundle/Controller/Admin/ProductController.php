@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Controller;
+namespace AppBundle\Controller\Admin;
 
 use AppBundle\Entity\Product;
 use AppBundle\Entity\Vendor;
@@ -41,7 +41,7 @@ class ProductController extends Controller {
         $products = $em->getRepository('AppBundle:Product')->findBy($options, ['itemNumber' => 'asc']);
         $vendors = $em->getRepository('AppBundle:Vendor')->findBy([], ['company' => 'asc']);
 
-        return $this->render('product/index.html.twig', array(
+        return $this->render('admin/product/index.html.twig', array(
                     'products' => $products,
                     'vendors' => $vendors
         ));
@@ -109,7 +109,7 @@ class ProductController extends Controller {
             return $this->redirectToRoute('product_index');
         }
 
-        return $this->render('product/import.html.twig', [
+        return $this->render('admin/product/import.html.twig', [
                     'form' => $form->createView()
         ]);
     }
@@ -153,7 +153,7 @@ class ProductController extends Controller {
             return $this->redirectToRoute('product_show', array('id' => $product->getId()));
         }
 
-        return $this->render('product/new.html.twig', array(
+        return $this->render('admin/product/new.html.twig', array(
                     'product' => $product,
                     'form' => $form->createView(),
         ));
@@ -168,7 +168,7 @@ class ProductController extends Controller {
     public function showAction(Product $product) {
         $deleteForm = $this->createDeleteForm($product);
 
-        return $this->render('product/show.html.twig', array(
+        return $this->render('admin/product/show.html.twig', array(
                     'product' => $product,
                     'delete_form' => $deleteForm->createView(),
         ));
@@ -214,7 +214,7 @@ class ProductController extends Controller {
             return $this->redirectToRoute('product_show', array('id' => $product->getId()));
         }
 
-        return $this->render('product/edit.html.twig', array(
+        return $this->render('admin/product/edit.html.twig', array(
                     'product' => $product,
                     'edit_form' => $editForm->createView(),
                     'delete_form' => $deleteForm->createView(),

@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Controller;
+namespace AppBundle\Controller\Admin;
 
 use AppBundle\Entity\ShowOrder;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -33,7 +33,7 @@ class ShowOrderController extends Controller {
 
         $showOrders = $em->getRepository('AppBundle:ShowOrder')->findAll();
 
-        return $this->render('showorder/index.html.twig', array(
+        return $this->render('admin/showorder/index.html.twig', array(
                     'showOrders' => $showOrders,
         ));
     }
@@ -57,7 +57,7 @@ class ShowOrderController extends Controller {
             return $this->redirectToRoute('showorder_show', array('id' => $showOrder->getId()));
         }
 
-        return $this->render('showorder/new.html.twig', array(
+        return $this->render('admin/showorder/new.html.twig', array(
                     'showOrder' => $showOrder,
                     'form' => $form->createView(),
         ));
@@ -72,7 +72,7 @@ class ShowOrderController extends Controller {
     public function showAction(ShowOrder $showOrder) {
         $deleteForm = $this->createDeleteForm($showOrder);
 
-        return $this->render('showorder/show.html.twig', array(
+        return $this->render('admin/showorder/show.html.twig', array(
                     'showOrder' => $showOrder,
                     'delete_form' => $deleteForm->createView(),
         ));
@@ -95,7 +95,7 @@ class ShowOrderController extends Controller {
             return $this->redirectToRoute('showorder_show', array('id' => $showOrder->getId()));
         }
 
-        return $this->render('showorder/edit.html.twig', array(
+        return $this->render('admin/showorder/edit.html.twig', array(
                     'showOrder' => $showOrder,
                     'edit_form' => $editForm->createView(),
                     'delete_form' => $deleteForm->createView(),

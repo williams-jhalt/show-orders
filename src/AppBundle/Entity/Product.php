@@ -69,7 +69,7 @@ class Product {
      *
      * @ORM\Column(name="imageUrl", type="string", length=255)
      */
-    private $imageUrl = "default_product.png";
+    private $imageUrl = self::DEFAULT_IMAGE;
 
     public function __construct() {
         $this->showOrderItems = new ArrayCollection();
@@ -136,6 +136,10 @@ class Product {
     public function setPrice($price) {
         $this->price = $price;
         return $this;
+    }
+    
+    public function getImageSet() {
+        return ($this->imageUrl != self::DEFAULT_IMAGE);
     }
 
 }

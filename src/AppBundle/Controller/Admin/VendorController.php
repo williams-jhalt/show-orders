@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Controller;
+namespace AppBundle\Controller\Admin;
 
 use AppBundle\Entity\Vendor;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -29,7 +29,7 @@ class VendorController extends Controller {
 
         $vendors = $em->getRepository('AppBundle:Vendor')->findAll();
 
-        return $this->render('vendor/index.html.twig', array(
+        return $this->render('admin/vendor/index.html.twig', array(
                     'vendors' => $vendors,
         ));
     }
@@ -73,7 +73,7 @@ class VendorController extends Controller {
             return $this->redirectToRoute('vendor_show', array('id' => $vendor->getId()));
         }
 
-        return $this->render('vendor/new.html.twig', array(
+        return $this->render('admin/vendor/new.html.twig', array(
                     'vendor' => $vendor,
                     'form' => $form->createView(),
         ));
@@ -88,7 +88,7 @@ class VendorController extends Controller {
     public function showAction(Vendor $vendor) {
         $deleteForm = $this->createDeleteForm($vendor);
 
-        return $this->render('vendor/show.html.twig', array(
+        return $this->render('admin/vendor/show.html.twig', array(
                     'vendor' => $vendor,
                     'delete_form' => $deleteForm->createView(),
         ));
@@ -134,7 +134,7 @@ class VendorController extends Controller {
             return $this->redirectToRoute('vendor_show', array('id' => $vendor->getId()));
         }
 
-        return $this->render('vendor/edit.html.twig', array(
+        return $this->render('admin/vendor/edit.html.twig', array(
                     'vendor' => $vendor,
                     'edit_form' => $editForm->createView(),
                     'delete_form' => $deleteForm->createView(),

@@ -1,4 +1,4 @@
-{% extends 'admin.html.twig' %}
+{% extends 'admin/admin.html.twig' %}
 
 {% block body %}
 
@@ -8,18 +8,12 @@
         {{ form_end(delete_form) }}
     </div>
 
-    <h1>Vendor edit</h1>
-    
-    <img src="{{ asset('uploads/vendors/' ~ vendor.imageUrl) }}">
+    <h1>Product edit</h1>
 
     {{ form_start(edit_form) }}
     {{ form_widget(edit_form) }}
     <input class="btn btn-primary" type="submit" value="Edit" />
-    <a class="btn btn-default" href="{{ path('vendor_index') }}">Cancel</a>
+    <a class="btn btn-default" href="{{ path('product_index') }}">Cancel</a>
     {{ form_end(edit_form) }}
-
-    <br>
-
-    <p><a class="btn btn-default" href="{{ path('product_import', {vendorId: vendor.id}) }}">Import Products</a></p>
 
 {% endblock %}
