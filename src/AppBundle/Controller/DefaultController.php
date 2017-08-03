@@ -164,8 +164,12 @@ class DefaultController extends Controller {
      * @Route("/submit-order", name="submit_order")
      */
     public function submitOrderAction(Request $request) {
+        
+        
+        $customer = $this->getDoctrine()->getRepository('AppBundle:Customer')->findOneByCustomerNumber($request->cookies->get('customerNumber'));
+        
 
-        $showOrder = $this->customer->getShowOrder();
+        $showOrder = $customer->getShowOrder();
 
         $form = $this->createFormBuilder($showOrder)
                 ->add('notes', TextareaType::class, [

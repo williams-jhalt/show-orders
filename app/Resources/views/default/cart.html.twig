@@ -10,17 +10,19 @@
                 e.preventDefault();
                 var form = $(this);
                 $.get(form.attr('action'), form.serialize(), function (data) {
-                   form.append('<i class="glyphicon glyphicon-ok"></i>'); 
+                    form.append('<i class="glyphicon glyphicon-ok"></i>');
                 });
                 return false;
             });
             $('.delete-cart-item').on('click', function (e) {
                 e.preventDefault();
-                var link = $(this);
-                $.get(link.attr('href'), function (data) {
-                    console.log(link.parentsUntil('tbody'));
-                   link.parentsUntil('tbody').remove();
-                });
+                if (confirm('Are you sure?')) {
+                    var link = $(this);
+                    $.get(link.attr('href'), function (data) {
+                        console.log(link.parentsUntil('tbody'));
+                        link.parentsUntil('tbody').remove();
+                    });
+                }
                 return false;
             });
         });
@@ -49,8 +51,10 @@
             <tr>
                 <th>Item Number</th>
                 <th>Name</th>
-                <th>Vendor</th>
                 <th>Quantity</th>
+                    {% if not active_customer.showOrder.submitted %}
+                    <th>Remove</th>
+                    {% endif %}
             </tr>
         </thead>
         <tbody>
@@ -58,23 +62,26 @@
                 <tr>
                     <td>{{ item.product.itemNumber }}</td>
                     <td>{{ item.product.name }}</td>
-                    <td>{{ item.product.vendor.vendorNumber }}</td>
                     <td>
                         {% if active_customer.showOrder.submitted %}
                             {{ item.quantity }}
                         {% else %}
-                            <form class="form-inline text-center update-cart" action="{{ path('update_cart') }}" method="post">
+                            <form class="form-inline update-cart" action="{{ path('update_cart') }}" method="post">
                                 <input type="hidden" name="itemNumber" value="{{ item.product.itemNumber }}">
                                 <div class="input-group">
                                     <input class="form-control input-sm" type="number" name="quantity" value="{{ item.quantity }}">
                                     <span class="input-group-btn">
                                         <button class="btn btn-default btn-sm" type="submit">Update</button>
-                                        <a class="btn btn-danger btn-sm delete-cart-item" href="{{ path('delete_cart_item', {itemNumber: item.product.itemNumber}) }}" title="Remove item"><i class="glyphicon glyphicon-remove"></i></a>
                                     </span>
                                 </div>
                             </form>
                         {% endif %}
                     </td>
+                    {% if not active_customer.showOrder.submitted %}                        
+                        <td>
+                            <a class="btn btn-danger btn-sm delete-cart-item" href="{{ path('delete_cart_item', {itemNumber: item.product.itemNumber}) }}" title="Remove item"><i class="glyphicon glyphicon-remove"></i></a>
+                        </td>
+                    {% endif %}
                 </tr>
             {% endfor %}
         </tbody>
