@@ -212,5 +212,22 @@ class DefaultController extends Controller {
 
         return $this->redirectToRoute('cart');
     }
+    
+    /**
+     * @Route("/cart-total", name="cart_total")
+     */
+    public function cartTotalAction() {
+
+        $items = $service->getItems($request->cookies->get('customerNumber'));
+
+        $total = 0.0;
+
+        foreach ($items as $item) {
+            $total += $item->getProduct()->getPrice() * $item->getQuantity();
+        }
+        
+        return new Response("$" . number_format($total, 2));
+        
+    }
 
 }

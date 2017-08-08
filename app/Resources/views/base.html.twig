@@ -39,14 +39,15 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a class="navbar-brand" href="{{ path('homepage') }}">WTC Show</a>
+
+                <ul class="nav navbar-nav">
+                    <li><a href="{{ path('cart') }}"><i class="glyphicon glyphicon-shopping-cart"></i></a></li>
+                </ul>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
             {% if app.request.cookies.get('customerNumber') %}
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                    <ul class="nav navbar-nav">
-                        <li><a href="{{ path('cart') }}"><i class="glyphicon glyphicon-shopping-cart"></i></a></li>
-                    </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li><a href="{{ path('clear_customer_number') }}">{{ app.request.cookies.get('customerNumber') }}</a></li>
                     </ul>

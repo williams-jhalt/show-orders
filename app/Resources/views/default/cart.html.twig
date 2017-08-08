@@ -10,7 +10,10 @@
                 e.preventDefault();
                 var form = $(this);
                 $.get(form.attr('action'), form.serialize(), function (data) {
-                    form.append('<i class="glyphicon glyphicon-ok"></i>');
+                    form.find('.update-cart-button').addClass('btn-primary');
+                    $.get('{{ path('cart_total') }}', function (data) {
+                        $('#cart_total').html(data);
+                    });
                 });
                 return false;
             });
@@ -41,7 +44,7 @@
         <tbody>
             <tr>
                 <th>Total:</th>
-                <td>${{ total|number_format(2) }}</td>
+                <td id="cart_total">${{ total|number_format(2) }}</td>
             </tr>
         </tbody>
     </table>
@@ -50,18 +53,17 @@
         <thead>
             <tr>
                 <th>Item Number</th>
-                <th>Name</th>
+                <th class="hidden-xs">Name</th>
+                <th>Price (EA)</th>
                 <th>Quantity</th>
-                    {% if not active_customer.showOrder.submitted %}
-                    <th>Remove</th>
-                    {% endif %}
             </tr>
         </thead>
         <tbody>
             {% for item in items %}
                 <tr>
                     <td>{{ item.product.itemNumber }}</td>
-                    <td>{{ item.product.name }}</td>
+                    <td class="hidden-xs">{{ item.product.name }}</td>
+                    <td>{{ item.product.price }}</td>
                     <td>
                         {% if active_customer.showOrder.submitted %}
                             {{ item.quantity }}
@@ -71,17 +73,13 @@
                                 <div class="input-group">
                                     <input class="form-control input-sm" type="number" name="quantity" value="{{ item.quantity }}">
                                     <span class="input-group-btn">
-                                        <button class="btn btn-default btn-sm" type="submit">Update</button>
+                                        <button class="btn btn-default btn-sm update-cart-button" type="submit">Update</button>
+                                        <a class="btn btn-danger btn-sm delete-cart-item" href="{{ path('delete_cart_item', {itemNumber: item.product.itemNumber}) }}" title="Remove item"><i class="glyphicon glyphicon-remove"></i></a>
                                     </span>
                                 </div>
                             </form>
                         {% endif %}
                     </td>
-                    {% if not active_customer.showOrder.submitted %}                        
-                        <td>
-                            <a class="btn btn-danger btn-sm delete-cart-item" href="{{ path('delete_cart_item', {itemNumber: item.product.itemNumber}) }}" title="Remove item"><i class="glyphicon glyphicon-remove"></i></a>
-                        </td>
-                    {% endif %}
                 </tr>
             {% endfor %}
         </tbody>
