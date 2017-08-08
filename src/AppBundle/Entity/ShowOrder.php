@@ -26,7 +26,7 @@ class ShowOrder {
      *
      * @var Customer
      * 
-     * @ORM\OneToOne(targetEntity="Customer", inversedBy="showOrder")
+     * @ORM\OneToOne(targetEntity="Customer", inversedBy="showOrder", cascade={"persist"})
      */
     private $customer;
 
@@ -48,7 +48,7 @@ class ShowOrder {
      *
      * @var ArrayCollection
      * 
-     * @ORM\OneToMany(targetEntity="ShowOrderItem", mappedBy="showOrder", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="ShowOrderItem", mappedBy="showOrder")
      */
     private $items;
 

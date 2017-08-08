@@ -54,12 +54,13 @@ class Customer {
      *
      * @var ShowOrder
      * 
-     * @ORM\OneToOne(targetEntity="ShowOrder", mappedBy="customer")
+     * @ORM\OneToOne(targetEntity="ShowOrder", mappedBy="customer", cascade={"persist"})
      */
     private $showOrder;
     
     public function __construct() {
         $this->showOrder = new ShowOrder();
+        $this->showOrder->setCustomer($this);
     }
 
     /**

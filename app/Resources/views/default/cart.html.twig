@@ -24,6 +24,9 @@
                     $.get(link.attr('href'), function (data) {
                         console.log(link.parentsUntil('tbody'));
                         link.parentsUntil('tbody').remove();
+                        $.get('{{ path('cart_total') }}', function (data) {
+                            $('#cart_total').html(data);
+                        });
                     });
                 }
                 return false;
@@ -63,7 +66,7 @@
                 <tr>
                     <td>{{ item.product.itemNumber }}</td>
                     <td class="hidden-xs">{{ item.product.name }}</td>
-                    <td>{{ item.product.price }}</td>
+                    <td class="text-right">${{ item.product.price|number_format(2) }}</td>
                     <td>
                         {% if active_customer.showOrder.submitted %}
                             {{ item.quantity }}

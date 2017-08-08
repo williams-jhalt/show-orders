@@ -216,7 +216,7 @@ class DefaultController extends Controller {
     /**
      * @Route("/cart-total", name="cart_total")
      */
-    public function cartTotalAction() {
+    public function cartTotalAction(Request $request, ShowOrderService $service) {
 
         $items = $service->getItems($request->cookies->get('customerNumber'));
 
