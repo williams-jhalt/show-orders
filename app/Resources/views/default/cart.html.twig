@@ -31,6 +31,10 @@
                 }
                 return false;
             });
+
+            $.get('{{ path('cart_total') }}', function (data) {
+                $('#cart_total').html(data);
+            });
         });
     </script>
 {% endblock %}
@@ -43,14 +47,7 @@
 
     <h1>Your Shopping List</h1>
 
-    <table class="table table-condensed">
-        <tbody>
-            <tr>
-                <th>Total:</th>
-                <td id="cart_total">${{ total|number_format(2) }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <div id="cart_total"></div>
 
     <table class="table">
         <thead>

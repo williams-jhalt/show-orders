@@ -164,10 +164,10 @@ class DefaultController extends Controller {
      * @Route("/submit-order", name="submit_order")
      */
     public function submitOrderAction(Request $request) {
-        
-        
+
+
         $customer = $this->getDoctrine()->getRepository('AppBundle:Customer')->findOneByCustomerNumber($request->cookies->get('customerNumber'));
-        
+
 
         $showOrder = $customer->getShowOrder();
 
@@ -201,7 +201,7 @@ class DefaultController extends Controller {
      * @Route("/delete-cart-item", name="delete_cart_item")
      */
     public function deleteCartItemAction(Request $request, ShowOrderService $service) {
-        
+
         $itemNumber = $request->get('itemNumber');
 
         $service->removeProductFromCart($request->cookies->get('customerNumber'), $itemNumber);
@@ -212,7 +212,7 @@ class DefaultController extends Controller {
 
         return $this->redirectToRoute('cart');
     }
-    
+
     /**
      * @Route("/cart-total", name="cart_total")
      */
@@ -220,14 +220,22 @@ class DefaultController extends Controller {
 
         $items = $service->getItems($request->cookies->get('customerNumber'));
 
-        $total = 0.0;
+        $totals = [];
+        $grandTotal = 0.0;
 
         foreach ($items as $item) {
-            $total += $item->getProduct()->getPrice() * $item->getQuantity();
+            $grandTotal += $item->getProduct()->getPrice() * $item->getQuantity();
+            if (isset($totals[$item->getProduct()->getVendor()->getCompany()])) {
+                $totals[$item->getProduct()->getVendor()->getCompany()] += $item->getProduct()->getPrice() * $item->getQuantity();
+            } else {
+                $totals[$item->getProduct()->getVendor()->getCompany()] = $item->getProduct()->getPrice() * $item->getQuantity();
+            }
         }
-        
-        return new Response("$" . number_format($total, 2));
-        
+
+        return $this->render('default/_cart_total.html.twig', [
+                    'totals' => $totals,
+                    'grand_total' => $grandTotal
+        ]);
     }
 
 }

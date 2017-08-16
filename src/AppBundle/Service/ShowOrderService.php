@@ -17,19 +17,18 @@ class ShowOrderService {
     public function __construct(EntityManager $em) {
         $this->em = $em;
     }
-    
+
     public function getItems($customerNumber) {
-        
+
         $customer = $this->em->getRepository('AppBundle:Customer')->findOneByCustomerNumber($customerNumber);
         return $customer->getShowOrder()->getItems();
-        
     }
 
     public function removeProductFromCart($customerNumber, $itemNumber) {
-        
+
         $customer = $this->em->getRepository('AppBundle:Customer')->findOneByCustomerNumber($customerNumber);
         $product = $this->em->getRepository('AppBundle:Product')->findOneByItemNumber($itemNumber);
-        
+
         foreach ($customer->getShowOrder()->getItems() as $item) {
             if ($item->getProduct() == $product) {
                 $this->em->remove($item);
@@ -37,11 +36,14 @@ class ShowOrderService {
                 return;
             }
         }
-        
     }
 
-    public function addProductToCart($customerNumber, $itemNumber, $quantity = 1) {        
+    public function addProductToCart($customerNumber, $itemNumber, $quantity = 1) {
         
+        if ($quantity == 0) {
+            return $this->removeProductFromCart($customerNumber, $itemNumber);
+        }
+
         $customer = $this->em->getRepository('AppBundle:Customer')->findOneByCustomerNumber($customerNumber);
         $product = $this->em->getRepository('AppBundle:Product')->findOneByItemNumber($itemNumber);
 
@@ -57,7 +59,7 @@ class ShowOrderService {
             }
         }
 
-        if (!$found) {
+        if (!$found && $quantity > 0) {
             $item = new ShowOrderItem();
             $item->setProduct($product);
             $item->setQuantity($quantity);
@@ -66,12 +68,12 @@ class ShowOrderService {
         }
 
         $this->em->flush();
-        
+
         return $item;
     }
 
     public function checkCart($customerNumber, $itemNumber) {
-        
+
         $customer = $this->em->getRepository('AppBundle:Customer')->findOneByCustomerNumber($customerNumber);
 
         $showOrder = $customer->getShowOrder();
