@@ -54,9 +54,13 @@ class DefaultController extends Controller {
     }
 
     /**
-     * @Route("/vendor/{id}", name="vendor_order_sheet")
+     * @Route("/products", name="vendor_order_sheet")
      */
-    public function vendorOrderSheetAction(Vendor $vendor, Request $request) {
+    public function vendorOrderSheetAction(Request $request) {
+
+        $id = $request->get('id');
+
+        $vendor = $this->getDoctrine()->getRepository('AppBundle:Vendor')->find($id);
 
         if ($request->query->has('showAsList')) {
             $request->getSession()->set('showAsList', $request->query->get('showAsList'));
@@ -129,17 +133,12 @@ class DefaultController extends Controller {
      */
     public function cartAction(Request $request, ShowOrderService $service) {
 
-        $items = $service->getItems($request->cookies->get('customerNumber'));
+        $vendorId = $request->get('vendor', null);
 
-        $total = 0.0;
-
-        foreach ($items as $item) {
-            $total += $item->getProduct()->getPrice() * $item->getQuantity();
-        }
+        $items = $service->getItems($request->cookies->get('customerNumber'), $vendorId);
 
         return $this->render('default/cart.html.twig', [
-                    'items' => $items,
-                    'total' => $total
+                    'items' => $items
         ]);
     }
 
@@ -226,9 +225,12 @@ class DefaultController extends Controller {
         foreach ($items as $item) {
             $grandTotal += $item->getProduct()->getPrice() * $item->getQuantity();
             if (isset($totals[$item->getProduct()->getVendor()->getCompany()])) {
-                $totals[$item->getProduct()->getVendor()->getCompany()] += $item->getProduct()->getPrice() * $item->getQuantity();
+                $totals[$item->getProduct()->getVendor()->getVendorNumber()]['total'] += $item->getProduct()->getPrice() * $item->getQuantity();
             } else {
-                $totals[$item->getProduct()->getVendor()->getCompany()] = $item->getProduct()->getPrice() * $item->getQuantity();
+                $totals[$item->getProduct()->getVendor()->getVendorNumber()] = [
+                    'total' => $item->getProduct()->getPrice() * $item->getQuantity(),
+                    'vendor' => $item->getProduct()->getVendor()
+                ];
             }
         }
 

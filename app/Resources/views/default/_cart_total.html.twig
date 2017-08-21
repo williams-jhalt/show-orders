@@ -1,3 +1,5 @@
+<p><a href="{{ path('cart', {vendor: null}) }}">Show All Vendors</a></p>
+
 <table class="table table-condensed">
     <thead>
         <tr>
@@ -6,10 +8,10 @@
         </tr>
     </thead>
     <tbody>
-        {% for vendor,total in totals %}
-            <tr>
-                <th>{{ vendor }}</th>
-                <td>${{ total|number_format(2) }}</td>
+        {% for i in totals %}
+            <tr class="{% if app.request.get('vendor') == i['vendor'].id %}active{% endif %}">
+                <th><a href="{{ path('cart', {vendor: i['vendor'].id}) }}">{{ i['vendor'].company }}</a></th>
+                <td>${{ i['total']|number_format(2) }}</td>
             </tr>
         {% endfor %}
     </tbody>

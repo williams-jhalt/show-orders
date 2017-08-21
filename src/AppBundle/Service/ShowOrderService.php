@@ -18,10 +18,24 @@ class ShowOrderService {
         $this->em = $em;
     }
 
-    public function getItems($customerNumber) {
+    public function getItems($customerNumber, $vendorId = null) {
 
         $customer = $this->em->getRepository('AppBundle:Customer')->findOneByCustomerNumber($customerNumber);
-        return $customer->getShowOrder()->getItems();
+        
+        $items = $customer->getShowOrder()->getItems();
+
+        if ($vendorId !== null) {
+            $vendor = $this->em->getRepository('AppBundle:Vendor')->find($vendorId);
+            $result = [];
+            foreach ($items as $item) {
+                if ($item->getProduct()->getVendor() == $vendor) {
+                    $result[] = $item;
+                }
+            }
+            return $result;
+        }
+
+        return $items;
     }
 
     public function removeProductFromCart($customerNumber, $itemNumber) {
@@ -39,7 +53,7 @@ class ShowOrderService {
     }
 
     public function addProductToCart($customerNumber, $itemNumber, $quantity = 1) {
-        
+
         if ($quantity == 0) {
             return $this->removeProductFromCart($customerNumber, $itemNumber);
         }

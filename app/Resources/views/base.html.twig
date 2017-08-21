@@ -39,16 +39,16 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a class="navbar-brand" href="{{ path('homepage') }}">WTC Show</a>
+                <ul class="nav navbar-nav">
+                    <li><a href="{{ path('cart') }}"><i class="glyphicon glyphicon-shopping-cart"></i> Cart</a></li>
+                </ul>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
             {% if app.request.cookies.get('customerNumber') %}
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                    <ul class="nav navbar-nav">
-                        <li><a href="{{ path('cart') }}"><i class="glyphicon glyphicon-shopping-cart"></i> Cart</a></li>
-                    </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="{{ path('clear_customer_number') }}">{{ app.request.cookies.get('customerNumber') }}</a></li>
+                        <li><a id="logout-button" href="{{ path('clear_customer_number') }}">{{ app.request.cookies.get('customerNumber') }}</a></li>
                     </ul>
                 </div><!-- /.navbar-collapse -->
             {% endif %}
@@ -68,6 +68,15 @@
 <script src="{{ asset('bower_components/bootstrap/dist/js/bootstrap.min.js') }}"></script>
 <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
 <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
+<script type="text/javascript">
+    $('#logout-button').on('click', function (e) {
+        if (!confirm('Do you want to log out?')) {
+            e.preventDefault();
+            return false;
+        }
+        return true;
+    });
+</script>
 {% block javascripts %}{% endblock %}
 
 </body>
