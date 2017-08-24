@@ -35,8 +35,8 @@
         <div class="form-group col-sm-12">
             <select id="vendor-select-form" class="form-control" name="id">
                 <option value="">Select Vendor</option>
-                {% for vendor in vendors %}
-                    <option value="{{ vendor.id }}">{{ vendor.company }}</option>
+                {% for x in vendors %}
+                    <option value="{{ x.id }}" {% if vendor.id == x.id %}selected{% endif %}>{{ x.company }}</option>
                 {% endfor %}
             </select>
         </div>
