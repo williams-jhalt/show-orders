@@ -22,11 +22,25 @@
                 });
                 return false;
             });
+            $('#vendor-select-form').on('change', function(e) {
+                this.form.submit();
+            });
         });
     </script>
 {% endblock %}
 
 {% block body %}
+
+    <form class="form" action="{{ path('vendor_order_sheet') }}" method="get">
+        <div class="form-group col-sm-12">
+            <select id="vendor-select-form" class="form-control" name="id">
+                <option value="">Select Vendor</option>
+                {% for vendor in vendors %}
+                    <option value="{{ vendor.id }}">{{ vendor.company }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </form>
 
     <h1>{{ vendor.company }}</h1>
 
