@@ -224,7 +224,7 @@ class DefaultController extends Controller {
 
         foreach ($items as $item) {
             $grandTotal += $item->getProduct()->getPrice() * $item->getQuantity();
-            if (isset($totals[$item->getProduct()->getVendor()->getCompany()])) {
+            if (isset($totals[$item->getProduct()->getVendor()->getVendorNumber()])) {
                 $totals[$item->getProduct()->getVendor()->getVendorNumber()]['total'] += $item->getProduct()->getPrice() * $item->getQuantity();
             } else {
                 $totals[$item->getProduct()->getVendor()->getVendorNumber()] = [
