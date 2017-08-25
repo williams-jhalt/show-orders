@@ -69,10 +69,12 @@ class DefaultController extends Controller {
         $showAsList = $request->getSession()->get('showAsList', true);
 
         $vendors = $this->getDoctrine()->getRepository('AppBundle:Vendor')->findBy([], ['company' => 'asc']);
+        $products = $this->getDoctrine()->getRepository('AppBundle:Product')->findBy(['vendor' => $vendor], ['itemNumber' => 'asc']);
 
         return $this->render('default/products.html.twig', [
                     'vendors' => $vendors,
                     'vendor' => $vendor,
+            'products' => $products,
                     'showAsList' => $showAsList
         ]);
     }

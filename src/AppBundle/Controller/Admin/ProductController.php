@@ -78,7 +78,7 @@ class ProductController extends Controller {
                 }
                 
                 $sku = trim($row[0]);
-                $name = trim($row[1]);
+                $name = preg_replace('/[[:^print:]]/', '', trim($row[1]));
                 $price = trim($row[2]);
                 $vendorId = trim($row[3]);
 
