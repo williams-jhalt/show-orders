@@ -10,6 +10,7 @@ use AppBundle\Entity\Vendor;
 use AppBundle\Service\ShowOrderService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
+use Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -74,7 +75,7 @@ class DefaultController extends Controller {
         return $this->render('default/products.html.twig', [
                     'vendors' => $vendors,
                     'vendor' => $vendor,
-            'products' => $products,
+                    'products' => $products,
                     'showAsList' => $showAsList
         ]);
     }
@@ -113,6 +114,24 @@ class DefaultController extends Controller {
         $response->headers->set('Location', $this->generateUrl('homepage'));
 
         return $response;
+    }
+
+    /**
+     * @Route("/add-to-cart-manual", name="add_to_cart_manual")
+     */
+    public function addToCartManual(Request $request, ShowOrderService $service) {
+
+        $itemNumber = $request->get('itemNumber');
+        $quantity = $request->get('quantity');
+        $customer = $request->cookies->get('customerNumber');
+
+        try {
+            $service->addProductToCart($customer, $itemNumber, $quantity);
+        } catch (Exception $e) {
+            $this->addFlash('notice', $e->getMessage());
+        }
+
+        return $this->redirectToRoute('cart');
     }
 
     /**

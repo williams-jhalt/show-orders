@@ -19,8 +19,12 @@
                 <td>{{ product.id }}</td>
             </tr>
             <tr>
-                <th>Itemnumber</th>
+                <th>Item Number</th>
                 <td>{{ product.itemNumber }}</td>
+            </tr>
+            <tr>
+                <th>Price</th>
+                <td>${{ product.price|number_format(2) }}</td>
             </tr>
         </tbody>
     </table>

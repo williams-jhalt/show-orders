@@ -6,6 +6,7 @@ use AppBundle\Entity\Customer;
 use AppBundle\Entity\Product;
 use AppBundle\Entity\ShowOrderItem;
 use Doctrine\ORM\EntityManager;
+use Exception;
 
 class ShowOrderService {
 
@@ -59,7 +60,16 @@ class ShowOrderService {
         }
 
         $customer = $this->em->getRepository('AppBundle:Customer')->findOneByCustomerNumber($customerNumber);
+        
+        if ($customer === null) {
+            throw new Exception("Customer Not Found");
+        }
+        
         $product = $this->em->getRepository('AppBundle:Product')->findOneByItemNumber($itemNumber);
+        
+        if ($product === null) {
+            throw new Exception("Product Not Found");
+        }
 
         $showOrder = $customer->getShowOrder();
 

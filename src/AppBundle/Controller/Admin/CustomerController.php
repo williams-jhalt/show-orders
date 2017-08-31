@@ -3,9 +3,12 @@
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Entity\Customer;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Form;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Customer controller.
@@ -29,6 +32,63 @@ class CustomerController extends Controller
         return $this->render('admin/customer/index.html.twig', array(
             'customers' => $customers,
         ));
+    }
+
+    /**
+     * @Route("/import", name="customer_import")
+     * 
+     * import file should have the following fields, no header
+     * 
+     * customerNumber
+     * company
+     * 
+     */
+    public function importAction(Request $request) {
+
+        $em = $this->getDoctrine()->getManager();
+
+        $form = $this->createImportForm();
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $data = $form->getData();
+            $file = $data['importFile']->openFile('r');
+
+            while (!$file->eof()) {
+                $row = $file->fgetcsv();
+
+                if (count($row) != 4) {
+                    continue;
+                }
+                
+                $customerNumber = trim($row[0]);
+                $company = preg_replace('/[[:^print:]]/', '', trim($row[1]));
+                $firstName = trim($row[2]);
+                $lastName = trim($row[3]);
+
+                $customer = $em->getRepository('AppBundle:Customer')->findOneByCustomerNumber($customerNumber);
+                
+                if ($customer === null) {
+                    $customer = new Customer();
+                    $customer->setCustomerNumber($customerNumber);
+                }
+
+                $customer->setCompany($company);
+                $customer->setFirstName($firstName);
+                $customer->setLastName($lastName);
+
+                $em->persist($customer);
+            }
+
+            $em->flush();
+
+            return $this->redirectToRoute('customer_index');
+        }
+
+        return $this->render('admin/customer/import.html.twig', [
+                    'form' => $form->createView()
+        ]);
     }
 
     /**
@@ -123,7 +183,7 @@ class CustomerController extends Controller
      *
      * @param Customer $customer The customer entity
      *
-     * @return \Symfony\Component\Form\Form The form
+     * @return Form The form
      */
     private function createDeleteForm(Customer $customer)
     {
@@ -132,5 +192,13 @@ class CustomerController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+
+    private function createImportForm() {
+        return $this->createFormBuilder()
+                        ->setAction($this->generateUrl('customer_import'))
+                        ->setMethod('POST')
+                        ->add('importFile', FileType::class)
+                        ->getForm();
     }
 }

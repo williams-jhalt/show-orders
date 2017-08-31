@@ -42,7 +42,16 @@
 {% block body %}
 
     {% if not active_customer.showOrder.submitted %}
-        <a class="btn btn-primary pull-right" href="{{ path('submit_order') }}" onclick="window.confirm('Proceeding to the next step will lock in your order, are you sure?');">Submit Your Order</a>
+        <form class="form-inline" action="{{ path('add_to_cart_manual') }}" method="post">
+            <div class="form-group">
+                <input class="form-control" type="text" name="itemNumber" placeholder="Item Number">                
+            </div>
+            <div class="form-group">
+                <input class="form-control" type="text" name="quantity" value="1" style="width:3em;">
+            </div>
+            <button class="btn btn-default" type="submit">Add Item</button>
+        </form>
+        <a class="btn btn-primary pull-right" href="{{ path('submit_order') }}" onclick="window.confirm('Proceeding to the next step will lock in your order, are you sure? Only submit at end of show.');">Submit Your Order</a>
     {% endif %}
 
     <h1>Your Shopping List</h1>
