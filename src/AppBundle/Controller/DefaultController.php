@@ -43,6 +43,14 @@ class DefaultController extends Controller {
     }
 
     /**
+     * @Route("/help", name="help")
+     */
+    public function helpAction() {
+
+        return $this->render('default/help.html.twig');
+    }
+
+    /**
      * @Route("/vendor", name="list_vendors")
      */
     public function listVendorsAction() {

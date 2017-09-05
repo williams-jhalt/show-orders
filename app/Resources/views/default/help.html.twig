@@ -1,0 +1,151 @@
+{% extends 'admin.html.twig' %}
+
+{% block body %}
+
+    <h1>Help</h1>
+
+    <h2>Introduction</h2>
+
+    <p>Welcome to the Show Order site provided by Williams Trading. Using this 
+        site you can prepare an order to be sent to our offices upon completion
+        of the trade show you are attending.</p>
+
+    <p>You will have the opportunity to review and make changes to your order
+        up to the point that you complete the order submission process.</p>
+
+    <h2>Logging In</h2>
+
+    <p>When you initially browse to the site you should be presented with an
+        input box asking for your customer number. <sup>(See Figure 1)</sup> If you do not know your 
+        customer number, it should be printed on the tablet you were given at
+        the beginning of the show.  If your tablet does not have a customer
+        number, or you have chosen to use your own device, and you still do not
+        know your customer number, please ask your sales representative.</p>
+
+    <p>Enter the customer number in the text field and click 'Start Ordering'</p>
+
+    <div class="text-center">
+        <img src="{{ asset('images/help/image01.png') }}" alt="Figure 1"><br>
+        <small><i>Figure 1</i></small>
+    </div>
+
+    <h2>Selecting a Vendor</h2>
+
+    <p>Vendors are listed alphabetically, you can click on the vendor's name, or
+        the vendor's logo to access their product list. You may also use the 
+        dropdown provided at the top of both the vendor selection page and the
+        product listings to jump directly to any vendor. <sup>(See Figure 2)</sup></p>
+
+    <div class="text-center">
+        <img src="{{ asset('images/help/image02.png') }}" alt="Figure 2"><br>
+        <small><i>Figure 2</i></small>
+    </div>
+
+    <h2>Adding an Item to the Cart</h2>
+
+    <p>You have two choices for viewing the products, a simple list <sup>(See Figure 3)</sup>, or a
+        detailed list <sup>(See Figure 4)</sup>. Under the simple list, you may add an item to your cart
+        by clicking on the '+' button. The button will change to a check mark
+        indicating that that item is now in your cart.</p>
+
+    <div class="text-center">
+        <img src="{{ asset('images/help/image03.png') }}" alt="Figure 3"><br>
+        <small><i>Figure 3</i></small>
+    </div>
+
+    <p>If you have chosen the detailed list, you will be able to select the
+        quantity of the item you wish to add to the cart. Choose the quantity
+        using the select box that says 'Qty' and then click update. The update
+        button will change to blue, indicating that the item at that quantity
+        has been added to your cart.</p>
+
+    <div class="text-center">
+        <img src="{{ asset('images/help/image04.png') }}" alt="Figure 4"><br>
+        <small><i>Figure 4</i></small>
+    </div>
+
+    <p>Regardless of which view you choose, you will have the opportunity to 
+        review and update your cart before you submit the order.</p>
+
+    <h2>Reviewing Your Cart</h2>
+
+    <p>By clicking on the 'Cart' button at the top left of the page, you can
+        access your cart at any time. You can view the totals per vendor and
+        a grand total of your order at the top. <sup>(See Figure 5)</sup></p>
+
+    <div class="text-center">
+        <img src="{{ asset('images/help/image05.png') }}" alt="Figure 5"><br>
+        <small><i>Figure 5</i></small>
+    </div>
+
+    <p>Clicking on a vendor's name, will limit the cart items shown to that 
+        vendor. Clicking on 'Show All Vendors' will return the cart to it's 
+        default state.</p>
+
+    <p>To modify the quantity of items in your cart, simply change the quantity
+        in the input box to the right of the item's description, and click
+        'Update'. The 'Update' button will change to blue, indicating that your
+        changes have been accepted. The totals at the top will also update 
+        indicating the changes.</p>
+
+    <p>To remove an item from your cart, click on the red 'X' button next to the
+        'Update' button. You will be asked to confirm your decision to remove 
+        the item.</p>
+
+    <h2>Submitting Your Cart</h2>
+
+    <p>Clicking on the blue 'Submit Your Order' button at the top right of the
+        cart page will present you with a confirmation dialog asking that you
+        understand the consequence of submitting your order.</p>
+
+    <p>After confirming that you are ready to submit the cart you will be taken
+        to the actual order submission page where you can add notes to be
+        attached to the order. Clicking on the red 'Submit Your Order' on this
+        page will finally confirm your submission. <sup>(See Figure 6)</sup></p>
+
+    <div class="text-center">
+        <img src="{{ asset('images/help/image06.png') }}" alt="Figure 6"><br>
+        <small><i>Figure 6</i></small>
+    </div>
+
+    <h2>Logging Out</h2>
+
+    <p>Some customers may have multiple customer numbers they wish to place
+        orders for, or some other reason may come up which requires you to
+        log out of the system and change the customer number.</p>
+
+    <p>At the bottom of every page, there is a 'Logout' button <sup>(See Figure 7)</sup> that will bring
+        you back to the initial page where you can enter your customer number.
+        Clicking on this button will not remove or in any way alter the cart 
+        for that customer number. Your cart is not stored on the tablet or any
+        device, and you can log in on multiple devices if you wish to work on
+        your cart from a laptop, phone, or other tablet.</p>
+
+    <div class="text-center">
+        <img src="{{ asset('images/help/image07.png') }}" alt="Figure 7"><br>
+        <small><i>Figure 7</i></small>
+    </div>
+
+    <p>Submitting your order will lock your cart in our system and prevent
+        you from adding or removing items, or making any other changes. If you
+        decide that you need to make changes after submitting the order, you
+        will need to contact your sales representative. <sup>(See Figure 8)</sup></p>
+
+    <div class="text-center">
+        <img src="{{ asset('images/help/image08.png') }}" alt="Figure 8"><br>
+        <small><i>Figure 8</i></small>
+    </div>
+
+    <h2>After the Show</h2>
+
+    <p>At the conclusion of the show, all customers may submit their orders
+        which will then be processed by Williams Trading.</p>
+
+    <h2>Video Instruction</h2>
+    
+    <video controls="" height="240" width="320">
+        <source src="http://videos.williams-trading.com/Order+Form+-+Google+Chrome+9_5_2017+9_25_13+AM.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+    </video>
+
+{% endblock %}

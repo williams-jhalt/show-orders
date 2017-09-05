@@ -39,18 +39,20 @@
                 <a class="navbar-brand" href="{{ path('homepage') }}">WTC Show</a>
                 {% if app.request.cookies.get('customerNumber') %}
                     <a class="btn btn-default navbar-btn" href="{{ path('cart') }}"><i class="glyphicon glyphicon-shopping-cart"></i> Cart</a>
-                {% endif %}
+                {% endif %}                
             </div><!-- /.container-fluid -->
         </nav>
         
         <div class="navbar navbar-inverse navbar-fixed-bottom">
             <div class="container">
-                <div class="navbar-right">
-                    <a id="logout-button" class="btn btn-default navbar-btn" href="{{ path('clear_customer_number') }}">Logout</a>
-                </div>
-                <span class="hidden-xs hidden-sm">
-                    <p class="navbar-text">Welcome back {{ app.request.cookies.get('customerNumber') }}</p>
-                </span>
+                {% if app.request.cookies.get('customerNumber') %}
+                    <div class="navbar-right">
+                        <a id="logout-button" class="btn btn-default navbar-btn" href="{{ path('clear_customer_number') }}">Logout</a>
+                    </div>
+                    <span class="hidden-xs hidden-sm">
+                        <p class="navbar-text">Welcome back {{ app.request.cookies.get('customerNumber') }}</p>
+                    </span>
+                {% endif %}
             </div>
         </div>
 
@@ -61,6 +63,7 @@
             {% for notice in app.flashes('notice') %}
                 <div class="alert alert-info">{{ notice }}</div>
             {% endfor %}
+            <div class="pull-right"><a href="{{ path('help') }}">Click Here for Help</a></div>
             {% block content %}
             {% block body %}{% endblock %}
             {% endblock %}
