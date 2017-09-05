@@ -1,4 +1,4 @@
-{% extends 'admin.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block body %}
 
@@ -25,7 +25,7 @@
     <p>Enter the customer number in the text field and click 'Start Ordering'</p>
 
     <div class="text-center">
-        <img src="{{ asset('images/help/image01.png') }}" alt="Figure 1"><br>
+        <img class="center-block img-responsive" src="{{ asset('images/help/image01.png') }}" alt="Figure 1"><br>
         <small><i>Figure 1</i></small>
     </div>
 
@@ -37,7 +37,7 @@
         product listings to jump directly to any vendor. <sup>(See Figure 2)</sup></p>
 
     <div class="text-center">
-        <img src="{{ asset('images/help/image02.png') }}" alt="Figure 2"><br>
+        <img class="center-block img-responsive" src="{{ asset('images/help/image02.png') }}" alt="Figure 2"><br>
         <small><i>Figure 2</i></small>
     </div>
 
@@ -49,7 +49,7 @@
         indicating that that item is now in your cart.</p>
 
     <div class="text-center">
-        <img src="{{ asset('images/help/image03.png') }}" alt="Figure 3"><br>
+        <img class="center-block img-responsive" src="{{ asset('images/help/image03.png') }}" alt="Figure 3"><br>
         <small><i>Figure 3</i></small>
     </div>
 
@@ -60,7 +60,7 @@
         has been added to your cart.</p>
 
     <div class="text-center">
-        <img src="{{ asset('images/help/image04.png') }}" alt="Figure 4"><br>
+        <img class="center-block img-responsive" src="{{ asset('images/help/image04.png') }}" alt="Figure 4"><br>
         <small><i>Figure 4</i></small>
     </div>
 
@@ -74,7 +74,7 @@
         a grand total of your order at the top. <sup>(See Figure 5)</sup></p>
 
     <div class="text-center">
-        <img src="{{ asset('images/help/image05.png') }}" alt="Figure 5"><br>
+        <img class="center-block img-responsive" src="{{ asset('images/help/image05.png') }}" alt="Figure 5"><br>
         <small><i>Figure 5</i></small>
     </div>
 
@@ -104,7 +104,7 @@
         page will finally confirm your submission. <sup>(See Figure 6)</sup></p>
 
     <div class="text-center">
-        <img src="{{ asset('images/help/image06.png') }}" alt="Figure 6"><br>
+        <img class="center-block img-responsive" src="{{ asset('images/help/image06.png') }}" alt="Figure 6"><br>
         <small><i>Figure 6</i></small>
     </div>
 
@@ -122,7 +122,7 @@
         your cart from a laptop, phone, or other tablet.</p>
 
     <div class="text-center">
-        <img src="{{ asset('images/help/image07.png') }}" alt="Figure 7"><br>
+        <img class="center-block img-responsive" src="{{ asset('images/help/image07.png') }}" alt="Figure 7"><br>
         <small><i>Figure 7</i></small>
     </div>
 
@@ -132,7 +132,7 @@
         will need to contact your sales representative. <sup>(See Figure 8)</sup></p>
 
     <div class="text-center">
-        <img src="{{ asset('images/help/image08.png') }}" alt="Figure 8"><br>
+        <img class="center-block img-responsive" src="{{ asset('images/help/image08.png') }}" alt="Figure 8"><br>
         <small><i>Figure 8</i></small>
     </div>
 
@@ -142,10 +142,8 @@
         which will then be processed by Williams Trading.</p>
 
     <h2>Video Instruction</h2>
-    
-    <video controls="" height="240" width="320">
-        <source src="http://videos.williams-trading.com/Order+Form+-+Google+Chrome+9_5_2017+9_25_13+AM.mp4" type="video/mp4" />
-        Your browser does not support the video tag.
-    </video>
+    <div class="embed-responsive embed-responsive-4by3">
+        <iframe class="embed-responsive-item" src="https://s3.amazonaws.com/videos.williams-trading.com/Order+Form+-+Google+Chrome+9_5_2017+9_25_13+AM.mp4"></iframe>
+    </div>
 
 {% endblock %}

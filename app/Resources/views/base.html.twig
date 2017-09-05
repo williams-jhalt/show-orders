@@ -40,6 +40,7 @@
                 {% if app.request.cookies.get('customerNumber') %}
                     <a class="btn btn-default navbar-btn" href="{{ path('cart') }}"><i class="glyphicon glyphicon-shopping-cart"></i> Cart</a>
                 {% endif %}                
+                <a class="btn btn-default navbar-btn" href="{{ path('help') }}">Help</a>
             </div><!-- /.container-fluid -->
         </nav>
         
@@ -63,7 +64,6 @@
             {% for notice in app.flashes('notice') %}
                 <div class="alert alert-info">{{ notice }}</div>
             {% endfor %}
-            <div class="pull-right"><a href="{{ path('help') }}">Click Here for Help</a></div>
             {% block content %}
             {% block body %}{% endblock %}
             {% endblock %}

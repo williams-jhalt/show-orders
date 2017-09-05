@@ -47,7 +47,7 @@ class DefaultController extends Controller {
      */
     public function helpAction() {
 
-        return $this->render('default/help.html.twig');
+        return $this->render('default/help.html.twig', []);
     }
 
     /**
