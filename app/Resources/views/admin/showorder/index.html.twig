@@ -19,6 +19,7 @@
                 <th>Id</th>
                 <th>Customer</th>
                 <th>Submitted</th>
+                <th>Total</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -34,6 +35,7 @@
                             <i class="glyphicon glyphicon-remove"></i>
                         {% endif %}
                     </td>
+                    <td>${{ showOrder.orderTotal|number_format(2) }}</td>
                     <td>
                         <a class="btn btn-sm btn-default" href="{{ path('showorder_edit', { 'id': showOrder.id }) }}">edit</a>
                         <a class="btn btn-sm btn-default" href="{{ path('showorder_export', { 'id': showOrder.id }) }}">export</a>
