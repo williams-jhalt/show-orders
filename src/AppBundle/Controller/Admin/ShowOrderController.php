@@ -145,14 +145,16 @@ class ShowOrderController extends Controller {
         $file->fputcsv([
             'sku',
             'name',
-            'quantity'
+            'quantity',
+            'vendor'
         ]);
         
         foreach ($order->getItems() as $item) {
             $file->fputcsv([
                 $item->getProduct()->getItemNumber(),
                 $item->getProduct()->getName(),
-                $item->getQuantity()
+                $item->getQuantity(),
+                $item->getVendor()->getVendorNumber()
             ]);
         }
         
