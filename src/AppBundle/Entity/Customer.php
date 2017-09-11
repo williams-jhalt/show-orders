@@ -57,10 +57,19 @@ class Customer {
      * @ORM\OneToOne(targetEntity="ShowOrder", mappedBy="customer", cascade={"persist"})
      */
     private $showOrder;
-    
+
+    /**
+     *
+     * @var ArrayCollection
+     * 
+     * @ORM\OneToMany(targetEntity="CustomerNote", mappedBy="customer")
+     */
+    private $notes;
+
     public function __construct() {
         $this->showOrder = new ShowOrder();
         $this->showOrder->setCustomer($this);
+        $this->notes = new ArrayCollection();
     }
 
     /**
@@ -166,6 +175,15 @@ class Customer {
 
     public function setShowOrders(ShowOrder $showOrder) {
         $this->showOrder = $showOrder;
+        return $this;
+    }
+
+    public function getNotes() {
+        return $this->notes;
+    }
+
+    public function setNotes(ArrayCollection $notes) {
+        $this->notes = $notes;
         return $this;
     }
 

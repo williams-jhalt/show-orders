@@ -3,6 +3,7 @@
 namespace AppBundle\Service;
 
 use AppBundle\Entity\Customer;
+use AppBundle\Entity\CustomerNote;
 use AppBundle\Entity\Product;
 use AppBundle\Entity\ShowOrderItem;
 use Doctrine\ORM\EntityManager;
@@ -17,6 +18,30 @@ class ShowOrderService {
 
     public function __construct(EntityManager $em) {
         $this->em = $em;
+    }
+    
+    public function addNotes($customerNumber, $vendorNumber, $notes) {
+        
+        $customer = $this->em->getRepository('AppBundle:Customer')->findOneByCustomerNumber($customerNumber);
+        $vendor = $this->em->getRepository('AppBundle:Vendor')->findOneByVendorNumber($vendorNumber);
+        
+        $note = new CustomerNote();
+        $note->setNotes($notes);
+        $note->setVendor($vendor);
+        $note->setCustomer($customer);
+        
+        $this->em->persist($note);
+        $this->em->flush($note);
+        
+    }
+    
+    public function getNotes($customerNumber, $vendorNumber) {
+                
+        $customer = $this->em->getRepository('AppBundle:Customer')->findOneByCustomerNumber($customerNumber);
+        $vendor = $this->em->getRepository('AppBundle:Vendor')->findOneByVendorNumber($vendorNumber);
+        
+        return $this->em->getRepository('AppBundle:CustomerNote')->findBy(['customer' => $customer, 'vendor' => $vendor]);        
+        
     }
 
     public function getItems($customerNumber, $vendorId = null) {

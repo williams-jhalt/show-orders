@@ -22,7 +22,7 @@
                 });
                 return false;
             });
-            $('#vendor-select-form').on('change', function(e) {
+            $('#vendor-select-form').on('change', function (e) {
                 this.form.submit();
             });
         });
@@ -42,7 +42,35 @@
         </div>
     </form>
 
+    <div class="pull-right">
+
+        <a class="btn btn-primary" role="button" data-toggle="collapse" href="#notesCollapse" aria-expanded="false" aria-controls="notesCollapse">
+            Notes
+        </a>
+
+    </div>
+
     <h1>{{ vendor.company }}</h1>
+
+    <div class="collapse" id="notesCollapse">
+
+        <ul class="list-group">
+            {% for note in notes %}
+                <li class="list-group-item">{{ note.notes }}</li>
+            {% endfor %}
+        </ul>
+
+        <form class="form" action="{{ path('add_note', { 'vendorId' : vendor.id } ) }}" method="post">
+            <div class="form-group">
+                <label class="form-label">Note</label>
+                <textarea class="form-control" name="notes"></textarea>
+            </div>
+            <button class="btn btn-default" type="submit">Add Note</button>
+        </form>
+
+        <br>
+
+    </div>
 
     <div class="navbar navbar-default">
         <div class="container-fluid">

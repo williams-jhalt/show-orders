@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="AppBundle\Repository\VendorRepository")
  */
 class Vendor {
-    
+
     const DEFAULT_IMAGE = 'default_vendor.png';
 
     /**
@@ -53,8 +53,17 @@ class Vendor {
      */
     private $products;
 
+    /**
+     *
+     * @var ArrayCollection
+     * 
+     * @ORM\OneToMany(targetEntity="CustomerNote", mappedBy="vendor")
+     */
+    private $notes;
+
     public function __construct() {
         $this->products = new ArrayCollection();
+        $this->notes = new ArrayCollection();
     }
 
     /**
@@ -127,13 +136,22 @@ class Vendor {
         $this->imageUrl = $imageUrl;
         return $this;
     }
-    
+
     public function __toString() {
         return $this->company;
     }
-    
+
     public function getImageSet() {
         return ($this->imageUrl != self::DEFAULT_IMAGE);
+    }
+
+    public function getNotes() {
+        return $this->notes;
+    }
+
+    public function setNotes(ArrayCollection $notes) {
+        $this->notes = $notes;
+        return $this;
     }
 
 }

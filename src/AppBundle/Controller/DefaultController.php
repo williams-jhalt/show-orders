@@ -43,6 +43,19 @@ class DefaultController extends Controller {
     }
 
     /**
+     * @Route("/add-note/{vendorId}", name="add_note")
+     */
+    public function addNoteAction($vendorId, Request $request, ShowOrderService $service) {
+
+        $vendor = $this->getDoctrine()->getRepository('AppBundle:Vendor')->find($vendorId);
+        $customerNumber = $request->cookies->get('customerNumber');
+        $notes = $request->get('notes');
+        $service->addNotes($customerNumber, $vendor->getVendorNumber(), $notes);
+
+        return $this->redirectToRoute('vendor_order_sheet', ['id' => $vendorId]);
+    }
+
+    /**
      * @Route("/help", name="help")
      */
     public function helpAction() {
@@ -65,10 +78,11 @@ class DefaultController extends Controller {
     /**
      * @Route("/products", name="vendor_order_sheet")
      */
-    public function vendorOrderSheetAction(Request $request) {
+    public function vendorOrderSheetAction(Request $request, ShowOrderService $service) {
 
         $id = $request->get('id');
 
+        $customerNumber = $request->cookies->get('customerNumber');
         $vendor = $this->getDoctrine()->getRepository('AppBundle:Vendor')->find($id);
 
         if ($request->query->has('showAsList')) {
@@ -79,12 +93,15 @@ class DefaultController extends Controller {
 
         $vendors = $this->getDoctrine()->getRepository('AppBundle:Vendor')->findBy([], ['company' => 'asc']);
         $products = $this->getDoctrine()->getRepository('AppBundle:Product')->findBy(['vendor' => $vendor], ['itemNumber' => 'asc']);
+        
+        $notes = $service->getNotes($customerNumber, $vendor->getVendorNumber());
 
         return $this->render('default/products.html.twig', [
                     'vendors' => $vendors,
                     'vendor' => $vendor,
                     'products' => $products,
-                    'showAsList' => $showAsList
+                    'showAsList' => $showAsList,
+                    'notes' => $notes
         ]);
     }
 
