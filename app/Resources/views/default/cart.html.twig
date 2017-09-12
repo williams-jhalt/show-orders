@@ -54,7 +54,7 @@
         <a class="btn btn-primary pull-right" href="{{ path('submit_order') }}" onclick="window.confirm('Proceeding to the next step will lock in your order, are you sure? Only submit at end of show.');">Submit Your Order</a>
     {% endif %}
 
-    <h1>Your Shopping List</h1>
+    <h1>Your Shopping List ({{ app.request.cookies.get('customerNumber') }})</h1>
 
     <div id="cart_total"></div>
 

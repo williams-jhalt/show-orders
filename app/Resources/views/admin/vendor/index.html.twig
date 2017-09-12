@@ -18,6 +18,7 @@
             <tr>
                 <th>Vendor Number</th>
                 <th>Company</th>
+                <th>Order Total</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -26,6 +27,7 @@
                 <tr>
                     <td><a href="{{ path('vendor_show', { 'id': vendor.id }) }}">{{ vendor.vendorNumber }}</td>
                     <td>{{ vendor.company }}</td>
+                    <td>${{ vendor.orderTotal|number_format(2) }}</td>
                     <td>
                         <a class="btn btn-sm btn-default" href="{{ path('vendor_edit', { 'id': vendor.id }) }}">edit</a>
                     </td>

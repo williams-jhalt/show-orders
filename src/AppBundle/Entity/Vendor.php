@@ -153,5 +153,25 @@ class Vendor {
         $this->notes = $notes;
         return $this;
     }
+    
+    public function getOrderTotal() {
+        
+        $total = 0;
+        
+        foreach ($this->products as $product) {
+            
+            $subtotal = 0;
+            
+            foreach ($product->getShowOrderItems() as $item) {
+                $subtotal += ($item->getQuantity() * $product->getPrice());
+            }
+            
+            $total += $subtotal;
+            
+        }
+        
+        return $total;
+        
+    }
 
 }

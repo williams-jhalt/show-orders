@@ -41,6 +41,9 @@
                     <a class="btn btn-default navbar-btn" href="{{ path('cart') }}"><i class="glyphicon glyphicon-shopping-cart"></i> Cart</a>
                 {% endif %}                
                 <a class="btn btn-default navbar-btn" href="{{ path('help') }}">Help</a>
+                <span class="hidden-xs hidden-sm navbar-right">
+                    <p class="navbar-text">{{ app.request.cookies.get('customerNumber') }}</p>
+                </span>
             </div><!-- /.container-fluid -->
         </nav>
         
