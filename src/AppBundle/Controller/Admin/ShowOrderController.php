@@ -154,7 +154,7 @@ class ShowOrderController extends Controller {
                 $item->getProduct()->getItemNumber(),
                 $item->getProduct()->getName(),
                 $item->getQuantity(),
-                $item->getVendor()->getVendorNumber()
+                $item->getProduct()->getVendor()->getVendorNumber()
             ]);
         }
         
