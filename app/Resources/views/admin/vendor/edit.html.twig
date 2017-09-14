@@ -2,12 +2,6 @@
 
 {% block body %}
 
-    <div class="pull-right">
-        {{ form_start(delete_form) }}
-        <input class="btn btn-danger" type="submit" value="Delete">
-        {{ form_end(delete_form) }}
-    </div>
-
     <h1>Vendor edit</h1>
     
     <img src="{{ asset('uploads/vendors/' ~ vendor.imageUrl) }}">
