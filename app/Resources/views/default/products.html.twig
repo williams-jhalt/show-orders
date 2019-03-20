@@ -57,7 +57,7 @@
         <ul class="list-group">
             {% for note in notes %}
                 <li class="list-group-item">{{ note.notes }}</li>
-            {% endfor %}
+                {% endfor %}
         </ul>
 
         <form class="form" action="{{ path('add_note', { 'vendorId' : vendor.id } ) }}" method="post">
@@ -79,100 +79,27 @@
         </div>
     </div>
 
+    <h3>New Products</h3>
+
     {% if showAsList %}
 
-        <table class="table">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>Image</th>
-                    <th>Item Number</th>
-                    <th>Name</th>
-                    <th>Price</th>
-                    {% if not active_customer.showOrder.submitted %}<th>Action</th>{% endif %}
-                </tr>
-            </thead>
-            <tbody>
-                {% for item in products %}
-                    <tr>
-                        <td style="vertical-align: middle;">
-                            {% if checkCart(item) %}
-                                <i class="glyphicon glyphicon-ok"></i>
-                            {% endif %}
-                        </td>
-                        <td><img src="{{ image('uploads/products/' ~ item.imageUrl).resize(100,100) }}"></td>
-                        <td style="vertical-align:middle;">{{ item.itemNumber }}</td>
-                        <td style="vertical-align:middle;">{{ item.name }}</td>
-                        <td style="vertical-align:middle;" class="text-right">${{ item.price|number_format(2) }}</td>
-                        {% if not active_customer.showOrder.submitted %}
-                            <td style="vertical-align:middle;">
-
-                                {% if checkCart(item.itemNumber) %}
-                                    <a class="btn btn-primary" href="#">
-                                        <i class="glyphicon glyphicon-ok"></i>
-                                    </a>
-                                {% else %}                                
-                                    <a class="btn btn-primary update-cart" href="{{ path('update_cart', {itemNumber: item.itemNumber, quantity: 1}) }}">
-                                        <i class="glyphicon glyphicon-plus"></i>
-                                    </a>      
-                                {% endif %}
-
-                            </td>
-                        {% endif %}
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        {% include 'default/_product_list.html.twig' with {'products': newProducts, 'active_customer': active_customer} only %}
 
     {% else %}
 
-        <div class="row">
+        {% include 'default/_product_items.html.twig' with {'products': newProducts, 'active_customer': active_customer} only %}
 
-            {% for item in vendor.products %}
+    {% endif %}
 
-                <div class="col-sm-4">
-                    <div class="panel panel-default">
+    <h3>Best Sellers</h3>
 
-                        <div class="panel-heading" style="height:4em;overflow:hidden;">
-                            {{ item.name }}
-                        </div>
+    {% if showAsList %}
 
-                        <div class="panel-body text-center">
-                            <img src="{{ image('uploads/products/' ~ item.imageUrl).resize(200,200) }}">
-                            <table class="table table-condensed">
-                                <tr><th>Item Number</th><td>{{ item.itemNumber }}</td></tr>
-                                <tr><th>Price</th><td>${{ item.price|number_format(2) }}</td></tr>
-                            </table>
-                        </div>
+        {% include 'default/_product_list.html.twig' with {'products': bestSellers, 'active_customer': active_customer} only %}
 
-                        {% if not active_customer.showOrder.submitted %}
+    {% else %}
 
-                            <div class="panel-footer text-center" style="min-height:4em;">
-                                <form class="form-inline update-cart" action="{{ path('update_cart') }}" method="get">
-                                    <input type="hidden" name="itemNumber" value="{{ item.itemNumber }}">
-                                    <div class="form-group">
-                                        <select class="form-control" name="quantity">
-                                            <option value="0">Qty</option>
-                                            {% for i in 1..10 %}
-                                                <option {% if checkCart(item.itemNumber) == i %}selected{% endif %} value="{{ i }}">{{ i }}</option>
-                                            {% endfor %}
-                                            {% for i in [12,14,16,18,20,22,24] %}
-                                                <option {% if checkCart(item.itemNumber) == i %}selected{% endif %} value="{{ i }}">{{ i }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                    <button class="btn btn-sm btn-default" type="submit">Update</button>
-                                </form>
-                            </div>
-
-                        {% endif %}
-
-                    </div>
-                </div>
-
-            {% endfor %}
-
-        </div>
+        {% include 'default/_product_items.html.twig' with {'products': bestSellers, 'active_customer': active_customer} only %}
 
     {% endif %}
 

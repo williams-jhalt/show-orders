@@ -32,7 +32,13 @@
                     <td>{{ product.itemNumber }}</td>
                     <td>{{ product.name }}</td>
                     <td>${{ product.price|number_format(2) }}</td>
-                    <td>{{ product.vendor.vendorNumber }}</td>
+                    <td>
+						{% if product.vendor %}
+							{{ product.vendor.vendorNumber }}
+						{% else %}
+							<i>This product has not been assigned to a vendor</i>
+						{% endif %}
+                    </td>
                     <td>
                         <a class="btn btn-default btn-sm" href="{{ path('product_edit', { 'id': product.id }) }}">edit</a>
                     </td>

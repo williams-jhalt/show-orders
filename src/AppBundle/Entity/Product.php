@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @UniqueEntity("itemNumber")
  */
 class Product {
-    
+
     const DEFAULT_IMAGE = 'default_product.png';
 
     /**
@@ -70,6 +70,11 @@ class Product {
      * @ORM\Column(name="imageUrl", type="string", length=255)
      */
     private $imageUrl = self::DEFAULT_IMAGE;
+
+    /**
+     * @ORM\Column(name="bestSeller", type="boolean")
+     */
+    private $bestSeller = false;
 
     public function __construct() {
         $this->showOrderItems = new ArrayCollection();
@@ -137,7 +142,16 @@ class Product {
         $this->price = $price;
         return $this;
     }
-    
+
+    public function getBestSeller() {
+        return $this->bestSeller;
+    }
+
+    public function setBestSeller($bestSeller) {
+        $this->bestSeller = $bestSeller;
+        return $this;
+    }
+
     public function getImageSet() {
         return ($this->imageUrl != self::DEFAULT_IMAGE);
     }

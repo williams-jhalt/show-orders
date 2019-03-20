@@ -1,0 +1,13 @@
+{% extends 'sales/sales.html.twig' %}
+
+{% block body %}
+    
+    <h1>Customer creation</h1>
+
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <input class="btn btn-primary" type="submit" value="Create" />
+    <a class="btn btn-default" href="{{ path('sales_customer_index') }}">Cancel</a>
+    {{ form_end(form) }}
+    
+{% endblock %}

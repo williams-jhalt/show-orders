@@ -1,0 +1,42 @@
+<table class="table">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Image</th>
+            <th>Item Number</th>
+            <th>Name</th>
+            <th>Price</th>
+            {% if not active_customer.showOrder.submitted %}<th>Action</th>{% endif %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in products %}
+            <tr>
+                <td style="vertical-align: middle;">
+                    {% if checkCart(item) %}
+                        <i class="glyphicon glyphicon-ok"></i>
+                    {% endif %}
+                </td>
+                <td><img src="{{ image('uploads/products/' ~ item.imageUrl).resize(100,100) }}"></td>
+                <td style="vertical-align:middle;">{{ item.itemNumber }}</td>
+                <td style="vertical-align:middle;">{{ item.name }}</td>
+                <td style="vertical-align:middle;" class="text-right">${{ item.price|number_format(2) }}</td>
+                {% if not active_customer.showOrder.submitted %}
+                    <td style="vertical-align:middle;">
+
+                        {% if checkCart(item.itemNumber) %}
+                            <a class="btn btn-primary" href="#">
+                                <i class="glyphicon glyphicon-ok"></i>
+                            </a>
+                        {% else %}                                
+                            <a class="btn btn-primary update-cart" href="{{ path('update_cart', {itemNumber: item.itemNumber, quantity: 1}) }}">
+                                <i class="glyphicon glyphicon-plus"></i>
+                            </a>      
+                        {% endif %}
+
+                    </td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

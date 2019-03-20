@@ -1,0 +1,21 @@
+{% extends 'sales/sales.html.twig' %}
+
+{% block body %}
+
+    <h1>Showorder</h1>
+
+    <dl class="dl-horizontal">
+        <dt>ID</dt>
+        <dd>{{ showOrder.id }}</dd>
+        <dt>Customer</dt>
+        <dd>{{ showOrder.customer.company }}</dd>
+        <dt>Order Total</dt>
+        <dd>${{ showOrder.orderTotal|number_format(2) }}</dd>
+    </dl>
+
+    <p>
+        <a class="btn btn-default" href="{{ path('sales_showorder_index') }}"><i class="glyphicon glyphicon-arrow-left"></i> Back</a>
+        <a class="btn btn-default" href="{{ path('sales_showorder_edit', { 'id': showOrder.id }) }}"><i class="glyphicon glyphicon-pencil"></i> Edit</a>   
+    </p>
+
+{% endblock %}

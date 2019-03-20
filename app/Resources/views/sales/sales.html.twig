@@ -14,11 +14,8 @@
 {% block content %}
     
     <ul class="nav nav-tabs">
-        <li><a href="{{ path('customer_index') }}">Manage Customers</a></li>
-        <li><a href="{{ path('vendor_index') }}">Manage Vendors</a></li>
-        <li><a href="{{ path('product_index') }}">Manage Products</a></li>
-        <li><a href="{{ path('showorder_index') }}">Manage Orders</a></li>
-        <li><a href="{{ path('user_index') }}">Manage Users</a></li>
+        <li><a href="{{ path('sales_customer_index') }}">Manage Customers</a></li>
+        <li><a href="{{ path('sales_showorder_index') }}">Manage Orders</a></li>
     </ul>
 
     {% block body %}{% endblock %}

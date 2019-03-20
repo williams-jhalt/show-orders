@@ -54,7 +54,7 @@ class Customer {
      *
      * @var ShowOrder
      * 
-     * @ORM\OneToOne(targetEntity="ShowOrder", mappedBy="customer", cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="ShowOrder", mappedBy="customer", cascade={"persist","remove"})
      */
     private $showOrder;
 
@@ -65,6 +65,14 @@ class Customer {
      * @ORM\OneToMany(targetEntity="CustomerNote", mappedBy="customer")
      */
     private $notes;
+
+    /**
+     *
+     * @var SalesPerson
+     * 
+     * @ORM\ManyToOne(targetEntity="SalesPerson", inversedBy="customers", cascade={"remove"})
+     */
+    private $salesPerson;
 
     public function __construct() {
         $this->showOrder = new ShowOrder();
@@ -186,5 +194,14 @@ class Customer {
         $this->notes = $notes;
         return $this;
     }
+    
+    public function getSalesPerson() {
+		return $this->salesPerson;
+	}
+	
+	public function setSalesPerson(SalesPerson $salesPerson) {
+		$this->salesPerson = $salesPerson;
+		return $this;
+	}
 
 }

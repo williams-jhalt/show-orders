@@ -20,8 +20,26 @@ class User extends BaseUser {
      */
     protected $id;
 
+    /**
+     * @ORM\OneToOne(targetEntity="SalesPerson")
+     */
+    private $salesPerson;
+
     public function __construct() {
         parent::__construct();
+    }
+
+    public function __toString() {
+        return $this->username;
+    }
+
+    public function getSalesPerson() {
+        return $this->salesPerson;
+    }
+
+    public function setSalesPerson($salesPerson) {
+        $this->salesPerson = $salesPerson;
+        return $this;
     }
 
 }

@@ -1,0 +1,47 @@
+<div class="row">
+
+    {% for item in products %}
+
+        <div class="col-sm-4">
+            <div class="panel panel-default">
+
+                <div class="panel-heading" style="height:4em;overflow:hidden;">
+                    {{ item.name }}
+                </div>
+
+                <div class="panel-body text-center">
+                    <img src="{{ image('uploads/products/' ~ item.imageUrl).resize(200,200) }}">
+                    <table class="table table-condensed">
+                        <tr><th>Item Number</th><td>{{ item.itemNumber }}</td></tr>
+                        <tr><th>Price</th><td>${{ item.price|number_format(2) }}</td></tr>
+                    </table>
+                </div>
+
+                {% if not active_customer.showOrder.submitted %}
+
+                    <div class="panel-footer text-center" style="min-height:4em;">
+                        <form class="form-inline update-cart" action="{{ path('update_cart') }}" method="get">
+                            <input type="hidden" name="itemNumber" value="{{ item.itemNumber }}">
+                            <div class="form-group">
+                                <select class="form-control" name="quantity">
+                                    <option value="0">Qty</option>
+                                    {% for i in 1..10 %}
+                                        <option {% if checkCart(item.itemNumber) == i %}selected{% endif %} value="{{ i }}">{{ i }}</option>
+                                    {% endfor %}
+                                    {% for i in [12,14,16,18,20,22,24] %}
+                                        <option {% if checkCart(item.itemNumber) == i %}selected{% endif %} value="{{ i }}">{{ i }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <button class="btn btn-sm btn-default" type="submit">Update</button>
+                        </form>
+                    </div>
+
+                {% endif %}
+
+            </div>
+        </div>
+
+    {% endfor %}
+
+</div>

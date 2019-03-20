@@ -37,6 +37,12 @@
         <nav class="navbar navbar-default navbar-fixed-top">
             <div class="container">
                 <a class="navbar-brand" href="{{ path('homepage') }}">WTC Show</a>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <a class="btn btn-default navbar-btn" href="{{ path('admin_homepage') }}">Admin</a>
+                {% endif %}
+                {% if is_granted('ROLE_SALES') %}
+                    <a class="btn btn-default navbar-btn" href="{{ path('sales_homepage') }}">Sales</a>
+                {% endif %}
                 {% if app.request.cookies.get('customerNumber') %}
                     <a class="btn btn-default navbar-btn" href="{{ path('cart') }}"><i class="glyphicon glyphicon-shopping-cart"></i> Cart</a>
                 {% endif %}                
@@ -44,11 +50,21 @@
                 <span class="hidden-xs hidden-sm navbar-right">
                     <p class="navbar-text">{{ app.request.cookies.get('customerNumber') }}</p>
                 </span>
-            </div><!-- /.container-fluid -->
+            </div>
         </nav>
-        
+
         <div class="navbar navbar-inverse navbar-fixed-bottom">
             <div class="container">
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                    <div class="navbar-right">
+                        <a id="logout-button" class="btn btn-default navbar-btn" href="{{ path('fos_user_security_logout') }}">Logout</a>
+                    </div>
+                    <span class="hidden-xs hidden-sm">
+                        <p class="navbar-text">Welcome back {{ app.user.username }}</p>
+                    </span>
+                {% else %}
+                    <a class="btn btn-link navbar-btn" href="{{ path('fos_user_security_login') }}">Login</a> 
+               {%  endif %}
                 {% if app.request.cookies.get('customerNumber') %}
                     <div class="navbar-right">
                         <a id="logout-button" class="btn btn-default navbar-btn" href="{{ path('clear_customer_number') }}">Logout</a>
@@ -68,7 +84,7 @@
                 <div class="alert alert-info">{{ notice }}</div>
             {% endfor %}
             {% block content %}
-            {% block body %}{% endblock %}
+                {% block body %}{% endblock %}
             {% endblock %}
         </div>
 

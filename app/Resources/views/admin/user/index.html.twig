@@ -1,0 +1,50 @@
+{% extends 'admin/admin.html.twig' %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#userTable').DataTable();
+            $('#userTable').show();
+        });
+    </script>
+{% endblock %}
+
+{% block body %}
+
+    <h1>Users list</h1>
+
+    <table id="userTable" class="table" style="display:none;">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Sales Person</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+                <tr>
+                    <td><a href="{{ path('user_show', { 'id': user.id }) }}">{{ user.username }}</a></td>
+                    <td>{{ user.email }}</td>
+                    <td>
+                        {% if (user.salesPerson) %}
+                            {{ user.salesPerson.name }}
+                        {% else %}
+                            Admin
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a class="btn btn-sm btn-default" href="{{ path('user_edit', { 'id': user.id }) }}">edit</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <p>
+        <a class="btn btn-primary" href="{{ path('user_new') }}">Create a New User</a>
+    </p>
+
+{% endblock %}

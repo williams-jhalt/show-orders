@@ -27,6 +27,14 @@ class DefaultController extends Controller {
      */
     public function indexAction(Request $request, SessionInterface $session) {
 
+        if ($this->isGranted('ROLE_ADMIN')) {
+            return $this->redirectToRoute('admin_homepage');
+        }
+
+        if ($this->isGranted('ROLE_SALES')) {
+            return $this->redirectToRoute('sales_homepage');
+        }
+
         if ($request->cookies->has('customerNumber')) {
             return $this->redirectToRoute('list_vendors');
         }
@@ -92,14 +100,16 @@ class DefaultController extends Controller {
         $showAsList = $request->getSession()->get('showAsList', true);
 
         $vendors = $this->getDoctrine()->getRepository('AppBundle:Vendor')->findBy([], ['company' => 'asc']);
-        $products = $this->getDoctrine()->getRepository('AppBundle:Product')->findBy(['vendor' => $vendor], ['itemNumber' => 'asc']);
-        
+        $newProducts = $this->getDoctrine()->getRepository('AppBundle:Product')->findBy(['vendor' => $vendor, 'bestSeller' => false], ['itemNumber' => 'asc']);
+        $bestSellers = $this->getDoctrine()->getRepository('AppBundle:Product')->findBy(['vendor' => $vendor, 'bestSeller' => true], ['itemNumber' => 'asc']);
+
         $notes = $service->getNotes($customerNumber, $vendor->getVendorNumber());
 
         return $this->render('default/products.html.twig', [
                     'vendors' => $vendors,
                     'vendor' => $vendor,
-                    'products' => $products,
+                    'newProducts' => $newProducts,
+                    'bestSellers' => $bestSellers,
                     'showAsList' => $showAsList,
                     'notes' => $notes
         ]);

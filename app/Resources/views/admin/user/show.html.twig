@@ -1,0 +1,41 @@
+{% extends 'admin/admin.html.twig' %}
+
+{% block body %}
+
+    <div class="pull-right">         
+        {{ form_start(delete_form) }}
+        <input class="btn btn-danger" type="submit" value="Delete">
+        {{ form_end(delete_form) }}
+    </div>
+
+    <h1>User</h1>
+
+    <table class="table table-condensed">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ user.id }}</td>
+            </tr>
+            <tr>
+                <th>Username</th>
+                <td>{{ user.username }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ user.email }}</td>
+            </tr>
+            {% if user.salesPerson %}
+                <tr>
+                    <th>Sales Person</th>
+                    <td>{{ user.salesPerson.name }}
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+
+    <p>
+        <a class="btn btn-default" href="{{ path('user_index') }}"><i class="glyphicon glyphicon-arrow-left"></i> Back</a>
+        <a class="btn btn-default" href="{{ path('user_edit', { 'id': user.id }) }}"><i class="glyphicon glyphicon-pencil"></i> Edit</a>   
+    </p>
+
+{% endblock %}
