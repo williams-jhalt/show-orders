@@ -137,7 +137,7 @@ class ProductController extends Controller {
             $file = $product->getImageUrl();
 
             if ($file !== null) {
-                $filename = md5(uniqid()) . $file->guessExtension();
+                $filename = md5(uniqid()) . "." . $file->guessExtension();
 
                 if ($file->move($this->getParameter('product_image_dir'), $filename)) {
                     $product->setImageUrl($filename);
@@ -199,7 +199,7 @@ class ProductController extends Controller {
             $file = $product->getImageUrl();
 
             if ($file !== null) {
-                $filename = md5(uniqid()) . $file->guessExtension();
+                $filename = md5(uniqid()) . "." . $file->guessExtension();
                 if ($file->move($this->getParameter('product_image_dir'), $filename)) {
                     $product->setImageUrl($filename);
                 }

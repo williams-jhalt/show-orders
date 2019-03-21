@@ -2,13 +2,13 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    <link href="{{ asset('bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('lib/datatables.net-bs/css/dataTables.bootstrap.min.css') }}" rel="stylesheet">
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
-    <script src="{{ asset('bower_components/datatables.net/js/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
+    <script src="{{ asset('lib/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('lib/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
 {% endblock %}
 
 {% block content %}

@@ -22,7 +22,7 @@
         <meta name="msapplication-TileColor" content="#ffffff">
         <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
         <meta name="theme-color" content="#ffffff">
-        <link href="{{ asset('bower_components/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet">
+        <link href="{{ asset('lib/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet">
         <style type="text/css">
             body {
                 margin-top: 70px;
@@ -62,17 +62,16 @@
                     <span class="hidden-xs hidden-sm">
                         <p class="navbar-text">Welcome back {{ app.user.username }}</p>
                     </span>
-                {% else %}
-                    <a class="btn btn-link navbar-btn" href="{{ path('fos_user_security_login') }}">Login</a> 
-               {%  endif %}
-                {% if app.request.cookies.get('customerNumber') %}
+                {% elseif app.request.cookies.get('customerNumber') %}
                     <div class="navbar-right">
                         <a id="logout-button" class="btn btn-default navbar-btn" href="{{ path('clear_customer_number') }}">Logout</a>
                     </div>
                     <span class="hidden-xs hidden-sm">
                         <p class="navbar-text">Welcome back {{ app.request.cookies.get('customerNumber') }}</p>
                     </span>
-                {% endif %}
+                {% else %}
+                    <a class="btn btn-link navbar-btn" href="{{ path('fos_user_security_login') }}">Login</a> 
+               {%  endif %}
             </div>
         </div>
 
@@ -88,8 +87,8 @@
             {% endblock %}
         </div>
 
-        <script src="{{ asset('bower_components/jquery/dist/jquery.min.js') }}"></script>
-        <script src="{{ asset('bower_components/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+        <script src="{{ asset('lib/jquery/dist/jquery.min.js') }}"></script>
+        <script src="{{ asset('lib/bootstrap/dist/js/bootstrap.min.js') }}"></script>
         <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
         <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
         <script type="text/javascript">

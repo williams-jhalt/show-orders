@@ -57,7 +57,7 @@ class VendorController extends Controller {
             $file = $vendor->getImageUrl();
 
             if ($file !== null) {
-                $filename = md5(uniqid()) . $file->guessExtension();
+                $filename = md5(uniqid()) . "." . $file->guessExtension();
 
                 if ($file->move($this->getParameter('vendor_image_dir'), $filename)) {
                     $vendor->setImageUrl($filename);
@@ -119,7 +119,7 @@ class VendorController extends Controller {
             $file = $vendor->getImageUrl();
 
             if ($file !== null) {
-                $filename = md5(uniqid()) . $file->guessExtension();
+                $filename = md5(uniqid()) . "." . $file->guessExtension();
                 if ($file->move($this->getParameter('vendor_image_dir'), $filename)) {
                     $vendor->setImageUrl($filename);
                 }

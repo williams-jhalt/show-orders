@@ -71,8 +71,7 @@ class CustomerController extends Controller
 
         return $this->render('sales/customer/edit.html.twig', array(
             'customer' => $customer,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+            'edit_form' => $editForm->createView()
         ));
     }
     
