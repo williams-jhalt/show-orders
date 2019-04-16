@@ -108,13 +108,13 @@ class VendorController extends Controller {
         $editForm = $this->createForm('AppBundle\Form\VendorType', $vendor);
         $editForm->handleRequest($request);
 
+        $existingFilename = $vendor->getImageUrl();
+
+        if (!empty($existingFilename)) {
+            $vendor->setImageUrl(new File($this->getParameter('vendor_image_dir') . '/' . $vendor->getImageUrl()));
+        }
+
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-
-            $existingFilename = $vendor->getImageUrl();
-
-            if (!empty($existingFilename)) {
-                $vendor->setImageUrl(new File($this->getParameter('vendor_image_dir') . '/' . $vendor->getImageUrl()));
-            }
 
             $file = $vendor->getImageUrl();
 
@@ -136,6 +136,7 @@ class VendorController extends Controller {
 
         return $this->render('admin/vendor/edit.html.twig', array(
                     'vendor' => $vendor,
+                    'existing_image' => $existingFilename,
                     'edit_form' => $editForm->createView(),
                     'delete_form' => $deleteForm->createView(),
         ));
