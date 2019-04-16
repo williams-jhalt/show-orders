@@ -104,15 +104,15 @@ class VendorController extends Controller {
 
         $vendor = $this->getDoctrine()->getRepository('AppBundle:Vendor')->find($id);
 
-        $deleteForm = $this->createDeleteForm($vendor);
-        $editForm = $this->createForm('AppBundle\Form\VendorType', $vendor);
-        $editForm->handleRequest($request);
-
         $existingFilename = $vendor->getImageUrl();
 
         if (!empty($existingFilename)) {
             $vendor->setImageUrl(new File($this->getParameter('vendor_image_dir') . '/' . $vendor->getImageUrl()));
         }
+
+        $deleteForm = $this->createDeleteForm($vendor);
+        $editForm = $this->createForm('AppBundle\Form\VendorType', $vendor);
+        $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
 
