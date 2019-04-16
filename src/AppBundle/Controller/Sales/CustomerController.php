@@ -59,14 +59,13 @@ class CustomerController extends Controller
      */
     public function editAction(Request $request, Customer $customer)
     {
-        $deleteForm = $this->createDeleteForm($customer);
-        $editForm = $this->createForm('AppBundle\Form\CustomerType', $customer);
+        $editForm = $this->createForm('AppBundle\Form\CustomerType', $customer)->remove('salesPerson');
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('customer_show', array('id' => $customer->getId()));
+            return $this->redirectToRoute('sales_customer_show', array('id' => $customer->getId()));
         }
 
         return $this->render('sales/customer/edit.html.twig', array(
