@@ -48,7 +48,7 @@ class VendorController extends Controller {
         if (!empty($existingFilename)) {
             $vendor->setImageUrl(new File($this->getParameter('vendor_image_dir') . '/' . $vendor->getImageUrl()));
         }
-        
+
         $form = $this->createForm('AppBundle\Form\VendorType', $vendor);
         $form->handleRequest($request);
 
@@ -104,17 +104,17 @@ class VendorController extends Controller {
 
         $vendor = $this->getDoctrine()->getRepository('AppBundle:Vendor')->find($id);
 
-        $existingFilename = $vendor->getImageUrl();
-
-        if (!empty($existingFilename)) {
-            $vendor->setImageUrl(new File($this->getParameter('vendor_image_dir') . '/' . $vendor->getImageUrl()));
-        }
-
         $deleteForm = $this->createDeleteForm($vendor);
         $editForm = $this->createForm('AppBundle\Form\VendorType', $vendor);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
+
+            $existingFilename = $vendor->getImageUrl();
+
+            if (!empty($existingFilename)) {
+                $vendor->setImageUrl(new File($this->getParameter('vendor_image_dir') . '/' . $vendor->getImageUrl()));
+            }
 
             $file = $vendor->getImageUrl();
 
