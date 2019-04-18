@@ -4,9 +4,12 @@
     <h1>Vendor creation</h1>
 
     {{ form_start(form) }}
+    
     {{ form_widget(form) }}
+    
     <input class="btn btn-primary" type="submit" value="Create" />
     <a class="btn btn-default" href="{{ path('vendor_index') }}">Cancel</a>
+    
     {{ form_end(form) }}
 
 {% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'admin/admin.html.twig' %}
+
+{% block body %}
+
+    <div class="row">
+
+        <div class="col-sm-12">
+
+            <h1>Sales Person Edit</h1>
+
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-sm-12">
+
+            {{ form_start(edit_form) }}
+            {{ form_widget(edit_form) }}
+            <input class="btn btn-primary" type="submit" value="Edit" />
+            <a class="btn btn-default" href="{{ path('salesperson_index') }}">Cancel</a>
+            {{ form_end(edit_form) }}
+
+        </div>
+
+    </div>
+
+{% endblock %}

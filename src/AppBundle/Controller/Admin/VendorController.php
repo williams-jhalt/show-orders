@@ -3,12 +3,14 @@
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Entity\Vendor;
+use AppBundle\Service\ErpConnector;
+use Doctrine\ORM\EntityManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -18,6 +20,53 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class VendorController extends Controller {
 
+    /**
+     * @Route("/import", name="vendor_import")
+     */
+    public function importAction(Request $request, EntityManager $em, ErpConnector $erp) {
+
+        $form = $this->createImportForm();
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $repo = $em->getRepository(Vendor::class);
+
+            $data = $form->getData();
+
+            $vendorNumbers = preg_split("/[\s,]+/", $data['vendorList']);
+
+            foreach ($vendorNumbers as $vendorNumber) {
+
+                $vendorData = $erp->getVendor($vendorNumber);
+                
+                if (empty($vendorData)) {
+                    continue;
+                }
+
+                $vendor = $repo->findOneByVendorNumber($vendorNumber);
+
+                if ($vendor == null) {
+                    $vendor = new Vendor();
+                }
+
+                $vendor->setVendorNumber($vendorData->vendorNumber);
+                $vendor->setCompany($vendorData->name);
+                $vendor->setEmail($vendorData->email);
+
+                $em->persist($vendor);
+            }
+
+            $em->flush();
+
+            return $this->redirectToRoute('vendor_index');
+        }
+
+        return $this->render('admin/vendor/import.html.twig', [
+                    'form' => $form->createView()
+        ]);
+    }
+    
     /**
      * Lists all vendor entities.
      *
@@ -174,6 +223,14 @@ class VendorController extends Controller {
                         ->setMethod('DELETE')
                         ->getForm()
         ;
+    }
+
+    private function createImportForm() {
+        return $this->createFormBuilder()
+                        ->setAction($this->generateUrl('vendor_import'))
+                        ->setMethod('POST')
+                        ->add('vendorList', TextareaType::class)
+                        ->getForm();
     }
 
 }

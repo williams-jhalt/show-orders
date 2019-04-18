@@ -1,0 +1,36 @@
+{% extends 'admin/admin.html.twig' %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#salespersonTable').DataTable();
+            $('#salespersonTable').show();
+        });
+    </script>
+{% endblock %}
+
+{% block body %}
+
+    <h1>Customers list</h1>
+
+    <table id="salespersonTable" class="table" style="display:none;">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for salesperson in salespersons %}
+                <tr>
+                    <td><a href="{{ path('salesperson_show', { 'id': salesperson.id }) }}">{{ salesperson.name }} ({{ salesperson.salesPersonNumber }})</a></td>
+                    <td>
+                        <a class="btn btn-sm btn-default" href="{{ path('salesperson_edit', { 'id': salesperson.id }) }}">edit</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

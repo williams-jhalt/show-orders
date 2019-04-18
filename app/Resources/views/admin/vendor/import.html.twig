@@ -1,0 +1,28 @@
+{% extends 'admin/admin.html.twig' %}
+
+{% block body %}
+    <h1>Vendor Import</h1>
+
+    <div class="row">
+        <div class="col-sm-6">
+
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            <input class="btn btn-primary" type="submit" value="Import" />
+            {{ form_end(form) }}
+
+        </div>
+
+        <div class="col-sm-6">
+            
+            Import vendors with one vendor number per line
+
+        </div>
+
+    </div>
+
+    <br>
+
+    <p><a class="btn btn-default" href="{{ path('vendor_index') }}"><i class="glyphicon glyphicon-arrow-left"></i> Back to List</a></p>
+
+{% endblock %}

@@ -14,6 +14,29 @@ class ErpConnector {
         $this->company = $company;
     }
 
+    public function getVendors() {
+
+        $ch = curl_init("https://" . $this->hostname . "/api/" . $this->company . "/vendor");
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['X-AUTH-TOKEN: ' . $this->token]);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $data = curl_exec($ch);
+        curl_close($ch);
+
+        return json_decode($data);
+    }
+
+    public function getVendor($vendorNumber) {
+
+
+        $ch = curl_init("https://" . $this->hostname . "/api/" . $this->company . "/vendor/" . $vendorNumber);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['X-AUTH-TOKEN: ' . $this->token]);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $data = curl_exec($ch);
+        curl_close($ch);
+
+        return json_decode($data);
+    }
+
     public function getCustomers() {
 
         $ch = curl_init("https://" . $this->hostname . "/api/" . $this->company . "/customer");

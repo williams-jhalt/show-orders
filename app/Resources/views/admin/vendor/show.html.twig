@@ -26,6 +26,10 @@
                 <th>Company</th>
                 <td>{{ vendor.company }}</td>
             </tr>
+            <tr>
+                <th>Booths</th>
+                <td>{% for booth in vendor.booths %}{{ booth }}/{% endfor %}</td>
+            </tr>
         </tbody>
     </table>
 

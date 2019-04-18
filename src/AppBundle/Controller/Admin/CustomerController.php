@@ -56,12 +56,12 @@ class CustomerController extends Controller {
             foreach ($customerNumbers as $customerNumber) {
 
                 $customerData = $erp->getCustomer($customerNumber);
-                
+
                 if (empty($customerData)) {
                     continue;
                 }
 
-                $customer = $repo->findOneByCustomerNumber($customerNumber);
+                $customer = $repo->findOneByCustomerNumber(trim($customerNumber));
 
                 if ($customer == null) {
                     $customer = new Customer();
@@ -89,9 +89,8 @@ class CustomerController extends Controller {
                 $customer->setSalesPerson($salesPerson);
 
                 $em->persist($customer);
+                $em->flush();
             }
-
-            $em->flush();
 
             return $this->redirectToRoute('customer_index');
         }

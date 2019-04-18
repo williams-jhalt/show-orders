@@ -25,19 +25,8 @@ class SalesPersonType extends AbstractType
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
-    {
-        
-        $salespeople = [];
-        
-        $t = $this->erp->getSalesPeople();
-        
-        foreach ($t as $sp) {
-            $salespeople[$sp->name] = $sp->id;
-        }
-        
-        $builder->add('salesPersonNumber', ChoiceType::class, [
-            'choices' => $salespeople
-        ])->add('name')->add('user');
+    {        
+        $builder->add('name');
     }
     
     /**

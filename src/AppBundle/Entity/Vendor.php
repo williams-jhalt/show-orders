@@ -61,6 +61,30 @@ class Vendor {
      */
     private $notes;
 
+    /**
+     * 
+     * @var string
+     * 
+     * @ORM\Column(name="booth", type="string", length=255, nullable=true)
+     */
+    private $booth;
+
+    /**
+     * 
+     * @var string
+     * 
+     * @ORM\Column(name="sponserhipLevel", type="string", length=255, nullable=true)
+     */
+    private $sponsershipLevel;
+
+    /**
+     *
+     * @var string
+     * 
+     * @ORM\Column(name="email", type="string", length=255)
+     */
+    private $email;
+
     public function __construct() {
         $this->products = new ArrayCollection();
         $this->notes = new ArrayCollection();
@@ -153,25 +177,50 @@ class Vendor {
         $this->notes = $notes;
         return $this;
     }
-    
+
     public function getOrderTotal() {
-        
+
         $total = 0;
-        
+
         foreach ($this->products as $product) {
-            
+
             $subtotal = 0;
-            
+
             foreach ($product->getShowOrderItems() as $item) {
                 $subtotal += ($item->getQuantity() * $product->getPrice());
             }
-            
+
             $total += $subtotal;
-            
         }
-        
+
         return $total;
-        
+    }
+
+    public function getSponsershipLevel() {
+        return $this->sponsershipLevel;
+    }
+
+    public function getEmail() {
+        return $this->email;
+    }
+
+    public function setSponsershipLevel($sponsershipLevel) {
+        $this->sponsershipLevel = $sponsershipLevel;
+        return $this;
+    }
+
+    public function setEmail($email) {
+        $this->email = $email;
+        return $this;
+    }
+
+    public function getBooth() {
+        return $this->booth;
+    }
+
+    public function setBooth($booth) {
+        $this->booth = $booth;
+        return $this;
     }
 
 }

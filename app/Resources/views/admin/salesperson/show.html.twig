@@ -1,0 +1,25 @@
+{% extends 'admin/admin.html.twig' %}
+
+{% block body %}
+    
+    <h1>Customer</h1>
+
+    <table class="table table-condensed">
+        <tbody>
+            <tr>
+                <th>Sales Person Number</th>
+                <td>{{ salesperson.salesPersonNumber }}</td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <td>{{ salesperson.name }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>
+        <a class="btn btn-default" href="{{ path('salesperson_index') }}"><i class="glyphicon glyphicon-arrow-left"></i> Back</a>
+        <a class="btn btn-default" href="{{ path('salesperson_edit', { 'id': salesperson.id }) }}"><i class="glyphicon glyphicon-pencil"></i> Edit</a>   
+    </p>
+
+{% endblock %}

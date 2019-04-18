@@ -74,6 +74,14 @@ class Customer {
      */
     private $salesPerson;
 
+    /**
+     *
+     * @var string
+     * 
+     * @ORM\Column(name="email", type="string", length=255, nullable=true)
+     */
+    private $email;
+
     public function __construct() {
         $this->showOrder = new ShowOrder();
         $this->showOrder->setCustomer($this);
@@ -194,14 +202,23 @@ class Customer {
         $this->notes = $notes;
         return $this;
     }
-    
+
     public function getSalesPerson() {
-		return $this->salesPerson;
-	}
-	
-	public function setSalesPerson(SalesPerson $salesPerson) {
-		$this->salesPerson = $salesPerson;
-		return $this;
-	}
+        return $this->salesPerson;
+    }
+
+    public function setSalesPerson(SalesPerson $salesPerson) {
+        $this->salesPerson = $salesPerson;
+        return $this;
+    }
+
+    public function getEmail() {
+        return $this->email;
+    }
+
+    public function setEmail($email) {
+        $this->email = $email;
+        return $this;
+    }
 
 }
