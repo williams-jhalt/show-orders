@@ -81,6 +81,7 @@ class ProductController extends Controller {
                 $name = preg_replace('/[[:^print:]]/', '', trim($row[1]));
                 $price = trim($row[2]);
                 $vendorId = trim($row[3]);
+                $bestSeller = (bool) $row[4];
 
                 $product = $em->getRepository('AppBundle:Product')->findOneByItemNumber($sku);
                 if ($product === null) {
@@ -100,6 +101,7 @@ class ProductController extends Controller {
                 $product->setName($name);
                 $product->setPrice($price);
                 $product->setVendor($vendor);
+                $product->setBestSeller($bestSeller);
 
                 $em->persist($product);
             }
