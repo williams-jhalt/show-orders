@@ -49,6 +49,13 @@ class DefaultController extends Controller {
                     'form' => $form->createView()
         ]);
     }
+    
+    /**
+     * @Route("/itinerary", name="itinerary")
+     */
+    public function itineraryAction() {
+        return $this->render('default/itinerary.html.twig');
+    }
 
     /**
      * @Route("/add-note/{vendorId}", name="add_note")
