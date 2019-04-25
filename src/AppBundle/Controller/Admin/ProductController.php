@@ -73,7 +73,7 @@ class ProductController extends Controller {
             while (!$file->eof()) {
                 $row = $file->fgetcsv();
 
-                if (count($row) != 4) {
+                if (count($row) != 5) {
                     continue;
                 }
                 
