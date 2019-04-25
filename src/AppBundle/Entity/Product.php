@@ -60,7 +60,7 @@ class Product {
      *
      * @var ArrayCollection
      * 
-     * @ORM\OneToMany(targetEntity="ShowOrderItem", mappedBy="product")
+     * @ORM\OneToMany(targetEntity="ShowOrderItem", mappedBy="product", cascade={"persist", "remove"})
      */
     private $showOrderItems;
 
