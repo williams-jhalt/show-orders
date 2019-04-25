@@ -104,9 +104,9 @@ class ProductController extends Controller {
                 $product->setBestSeller($bestSeller);
 
                 $em->persist($product);
+                $em->flush();
+                
             }
-
-            $em->flush();
 
             return $this->redirectToRoute('product_index');
         }
