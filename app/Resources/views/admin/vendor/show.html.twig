@@ -2,7 +2,8 @@
 
 {% block body %}
 
-    <div class="pull-right">         
+    <div class="pull-right">        
+        <br>
         {{ form_start(delete_form) }}
         <input class="btn btn-danger" type="submit" value="Delete">
         {{ form_end(delete_form) }}
@@ -28,7 +29,7 @@
             </tr>
             <tr>
                 <th>Booths</th>
-                <td>{% for booth in vendor.booths %}{{ booth }}/{% endfor %}</td>
+                <td>{{ vendor.booth }}</td>
             </tr>
         </tbody>
     </table>

@@ -1,8 +1,19 @@
 {% extends 'admin/admin.html.twig' %}
 
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#showorderTable').DataTable();
+            $('#showorderTable').show();
+        });
+    </script>
+{% endblock %}
+
 {% block body %}
 
     <div class="pull-right">
+        <br>
 
         {{ form_start(delete_form) }}
         <input class="btn btn-danger" type="submit" value="Delete">
@@ -20,7 +31,30 @@
         <dt>Order Total</dt>
         <dd>${{ showOrder.orderTotal|number_format(2) }}</dd>
     </dl>
-
+    
+    <table id="showorderTable" class="table" style="display:none;">
+        <thead>
+            <tr>
+                <th>Item Number</th>
+                <th>Name</th>
+                <th>Quantity</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        
+        <tbody>
+            {% for item in showOrder.items %}
+                <tr>
+                    <td>{{ item.product.itemNumber }}</td>
+                    <td>{{ item.product.name }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>${{ (item.product.price * item.quantity)|number_format(2) }}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+        
+        
     <p>
         <a class="btn btn-default" href="{{ path('showorder_index') }}"><i class="glyphicon glyphicon-arrow-left"></i> Back</a>
         <a class="btn btn-default" href="{{ path('showorder_edit', { 'id': showOrder.id }) }}"><i class="glyphicon glyphicon-pencil"></i> Edit</a>   
