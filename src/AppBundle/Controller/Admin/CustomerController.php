@@ -31,8 +31,15 @@ class CustomerController extends Controller {
 
         $customers = $em->getRepository('AppBundle:Customer')->findAll();
 
+        $grandTotal = 0.0;
+
+        foreach ($customers as $customer) {
+            $grandTotal += $customer->getShowOrder()->orderTotal();
+        }
+
         return $this->render('admin/customer/index.html.twig', array(
                     'customers' => $customers,
+                    'grandTotal' => $grandTotal
         ));
     }
 

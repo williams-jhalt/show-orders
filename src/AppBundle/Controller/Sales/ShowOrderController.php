@@ -42,8 +42,15 @@ class ShowOrderController extends Controller {
             $showOrders = array_merge($showOrders, $em->getRepository('AppBundle:ShowOrder')->findBy(['customer' => $customer]));
         }
 
+        $grandTotal = 0.0;
+
+        foreach ($showOrders as $showOrder) {
+            $grandTotal += $showOrder->orderTotal();
+        }
+
         return $this->render('sales/showorder/index.html.twig', array(
                     'showOrders' => $showOrders,
+                    'grandTotal' => $grandTotal
         ));
     }
 

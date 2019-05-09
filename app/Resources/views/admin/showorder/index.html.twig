@@ -11,6 +11,12 @@
 {% endblock %}
 
 {% block body %}
+    
+    <div class="pull-right">
+        <br>
+        <b>Grand Total:</b> ${{ grandTotal|number_format(2) }}
+    </div>
+    
     <h1>Show Orders</h1>
 
     <table id="showorderTable" class="table" style="display:none;">

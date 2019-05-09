@@ -33,8 +33,15 @@ class ShowOrderController extends Controller {
 
         $showOrders = $em->getRepository('AppBundle:ShowOrder')->findAll();
 
+        $grandTotal = 0.0;
+
+        foreach ($showOrders as $showOrder) {
+            $grandTotal += $showOrder->orderTotal();
+        }
+
         return $this->render('admin/showorder/index.html.twig', array(
                     'showOrders' => $showOrders,
+                    'grandTotal' => $grandTotal
         ));
     }
 
@@ -140,7 +147,7 @@ class ShowOrderController extends Controller {
      * @Route("/export/{id}", name="showorder_export")
      */
     public function exportAction(ShowOrder $order) {
-                
+
         $file = new SplTempFileObject();
         $file->fputcsv([
             'sku',
@@ -148,7 +155,7 @@ class ShowOrderController extends Controller {
             'quantity',
             'vendor'
         ]);
-        
+
         foreach ($order->getItems() as $item) {
             $file->fputcsv([
                 $item->getProduct()->getItemNumber(),
@@ -157,16 +164,16 @@ class ShowOrderController extends Controller {
                 $item->getProduct()->getVendor()->getVendorNumber()
             ]);
         }
-        
+
         $file->rewind();
-        
+
         $response = new StreamedResponse(function() use ($file) {
             foreach ($file as $line) {
                 echo $line;
             }
         });
         $dispositionHeader = $response->headers->makeDisposition(
-                ResponseHeaderBag::DISPOSITION_ATTACHMENT, 
+                ResponseHeaderBag::DISPOSITION_ATTACHMENT,
                 $order->getCustomer()->getCustomerNumber() . "-" . $order->getId() . ".csv"
         );
         $response->headers->set('Content-Type', 'text/csv; charset=utf-8');

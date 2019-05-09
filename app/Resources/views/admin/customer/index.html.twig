@@ -11,15 +11,20 @@
 {% endblock %}
 
 {% block body %}
+    
+    <div class="pull-right">
+        <br>
+        <b>Grand Total:</b> ${{ grandTotal|number_format(2) }}
+    </div>
 
-    <h1>Customers list</h1>
+    <h1>Customer List</h1>
 
     <table id="customerTable" class="table" style="display:none;">
         <thead>
             <tr>
                 <th>Customer Number</th>
                 <th>Company</th>
-                <th>Name</th>
+                <th>Total</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -28,7 +33,7 @@
                 <tr>
                     <td><a href="{{ path('customer_show', { 'id': customer.id }) }}">{{ customer.customerNumber }}</a></td>
                     <td>{{ customer.company }}</td>
-                    <td>{{ customer.lastName }}, {{ customer.firstName }}</td>
+                    <td>${{ customer.showOrder.orderTotal|number_format(2) }}</td>
                     <td>
                         <a class="btn btn-sm btn-default" href="{{ path('customer_edit', { 'id': customer.id }) }}">edit</a>
                     </td>

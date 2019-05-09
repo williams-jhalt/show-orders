@@ -18,6 +18,7 @@
         <thead>
             <tr>
                 <th>Name</th>
+                <th>Total</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -25,6 +26,7 @@
             {% for salesperson in salespersons %}
                 <tr>
                     <td><a href="{{ path('salesperson_show', { 'id': salesperson.id }) }}">{{ salesperson.name }} ({{ salesperson.salesPersonNumber }})</a></td>
+                    <td>${{ salesperson.orderTotal|number_format(2) }}</td>
                     <td>
                         <a class="btn btn-sm btn-default" href="{{ path('salesperson_edit', { 'id': salesperson.id }) }}">edit</a>
                     </td>
