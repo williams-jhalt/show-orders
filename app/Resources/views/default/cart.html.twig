@@ -44,9 +44,11 @@
     {% if not active_customer.showOrder.submitted %}
         <form class="form-inline" action="{{ path('add_to_cart_manual') }}" method="post">
             <div class="form-group">
+                <label class="sr-only" for="itemNumber">Item Number</label>
                 <input class="form-control" type="text" name="itemNumber" placeholder="Item Number">                
             </div>
             <div class="form-group">
+                <label class="sr-only" for="quantity">Quantity</label>
                 <input class="form-control" type="text" name="quantity" value="1" style="width:3em;">
             </div>
             <button class="btn btn-default" type="submit">Add Item</button>
@@ -70,7 +72,10 @@
         <tbody>
             {% for item in items %}
                 <tr>
-                    <td>{{ item.product.itemNumber }}</td>
+                    <td>
+                        {{ item.product.itemNumber }}<br>
+                        <a href="{{ 'uploads/products/' ~ item.product.imageUrl }}"><img src="{{ image('uploads/products/' ~ item.product.imageUrl).resize(100,100) }}"></a>
+                    </td>
                     <td class="hidden-xs">{{ item.product.name }}</td>
                     <td class="text-right">${{ item.product.price|number_format(2) }}</td>
                     <td>

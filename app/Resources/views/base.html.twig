@@ -35,22 +35,33 @@
     <body>
 
         <nav class="navbar navbar-default navbar-fixed-top">
-            <div class="container">
-                <a class="navbar-brand" href="{{ path('homepage') }}">WTC Show</a>
-                {% if is_granted('ROLE_ADMIN') %}
-                    <a class="btn btn-default navbar-btn" href="{{ path('admin_homepage') }}">Admin</a>
-                {% endif %}
-                {% if is_granted('ROLE_SALES') %}
-                    <a class="btn btn-default navbar-btn" href="{{ path('sales_homepage') }}">Sales</a>
-                {% endif %}
-                {% if app.request.cookies.get('customerNumber') %}
-                    <a class="btn btn-default navbar-btn" href="{{ path('cart') }}"><i class="glyphicon glyphicon-shopping-cart"></i> Cart</a>
-                {% endif %}                
-                <a class="btn btn-default navbar-btn" href="{{ path('itinerary') }}">Itinerary &amp; Floor Plan</a>
-                <a class="btn btn-default navbar-btn" href="{{ path('help') }}">Help</a>
-                <span class="hidden-xs hidden-sm navbar-right">
-                    <p class="navbar-text">{{ app.request.cookies.get('customerNumber') }}</p>
-                </span>
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="{{ path('homepage') }}">WTC Show</a>
+                    {% if app.request.cookies.get('customerNumber') %}
+                       <a class="btn btn-default navbar-btn" href="{{ path('cart') }}"><i class="glyphicon glyphicon-shopping-cart"></i> Cart</a> &nbsp;
+                    {% endif %}                
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a class="btn btn-default navbar-btn" href="{{ path('admin_homepage') }}">Admin</a>
+                    {% endif %}
+                    {% if is_granted('ROLE_SALES') %}
+                        <a class="btn btn-default navbar-btn" href="{{ path('sales_homepage') }}">Sales</a>
+                    {% endif %}
+                    <a class="btn btn-default navbar-btn" href="{{ path('itinerary') }}">Itinerary &amp; Floor Plan</a>
+                    <a class="btn btn-default navbar-btn" href="{{ path('help') }}">Help</a>
+                    <span class="hidden-xs hidden-sm navbar-right">
+                        <p class="navbar-text">{{ app.request.cookies.get('customerNumber') }}</p>
+                    </span>
+                </div>
             </div>
         </nav>
 
@@ -72,7 +83,7 @@
                     </span>
                 {% else %}
                     <a class="btn btn-link navbar-btn" href="{{ path('fos_user_security_login') }}">Login</a> 
-               {%  endif %}
+                {%  endif %}
             </div>
         </div>
 
