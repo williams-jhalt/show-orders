@@ -85,7 +85,7 @@
                             <form class="form-inline update-cart" action="{{ path('update_cart') }}" method="post">
                                 <input type="hidden" name="itemNumber" value="{{ item.product.itemNumber }}">
                                 <div class="input-group">
-                                    <input class="form-control input-sm" type="number" name="quantity" value="{{ item.quantity }}">
+                                    <input class="form-control input-sm" type="number" name="quantity" value="{{ item.quantity }}" autocomplete="off">
                                     <span class="input-group-btn">
                                         <button class="btn btn-default btn-sm update-cart-button" type="submit">Update</button>
                                         <a class="btn btn-danger btn-sm delete-cart-item" href="{{ path('delete_cart_item', {itemNumber: item.product.itemNumber}) }}" title="Remove item"><i class="glyphicon glyphicon-remove"></i></a>
