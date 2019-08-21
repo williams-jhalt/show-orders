@@ -12,6 +12,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 /**
  * Vendor controller.
@@ -19,6 +21,53 @@ use Symfony\Component\HttpFoundation\Request;
  * @Route("/admin/vendor")
  */
 class VendorController extends Controller {
+
+    /**
+     * @Route("/export", name="vendor_export")
+     */
+    public function exportAction(EntityManager $em) {
+
+        $fh = tmpfile();
+
+        fputcsv($fh, ["vendor", "item", "price", "quantity", "ext_price"]);
+
+        $vendors = $em->getRepository('AppBundle:Vendor')->findAll();
+
+        foreach ($vendors as $vendor) {
+
+            $products = $vendor->getProducts();
+
+            foreach ($products as $product) {
+
+                $showOrderItems = $product->getShowOrderItems();
+
+                $quantity = 0;
+
+                foreach ($showOrderItems as $item) {
+                    $quantity += $item->getQuantity();
+                }
+
+                fputcsv($fh, [
+                    $vendor->getVendorNumber(),
+                    $product->getItemNumber(),
+                    $product->getPrice(),
+                    $quantity,
+                    $quantity * $product->getPrice()
+                ]);
+            }
+        }
+
+        rewind($fh);
+
+        $response = new Response(stream_get_contents($fh));
+        $response->headers->set('Content-Type', 'text/csv');
+        $response->headers->makeDisposition(
+                ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+                'export.csv'
+        );
+
+        return $response;
+    }
 
     /**
      * @Route("/import", name="vendor_import")
@@ -39,7 +88,7 @@ class VendorController extends Controller {
             foreach ($vendorNumbers as $vendorNumber) {
 
                 $vendorData = $erp->getVendor($vendorNumber);
-                
+
                 if (empty($vendorData)) {
                     continue;
                 }
@@ -66,7 +115,7 @@ class VendorController extends Controller {
                     'form' => $form->createView()
         ]);
     }
-    
+
     /**
      * Lists all vendor entities.
      *
@@ -78,8 +127,15 @@ class VendorController extends Controller {
 
         $vendors = $em->getRepository('AppBundle:Vendor')->findAll();
 
+        $grandTotal = 0.0;
+
+        foreach ($vendors as $vendor) {
+            $grandTotal += $vendor->getOrderTotal();
+        }
+
         return $this->render('admin/vendor/index.html.twig', array(
                     'vendors' => $vendors,
+                    'grandTotal' => $grandTotal
         ));
     }
 
