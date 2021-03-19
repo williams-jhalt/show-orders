@@ -56,7 +56,7 @@
                     {% if is_granted('ROLE_SALES') %}
                         <a class="btn btn-default navbar-btn" href="{{ path('sales_homepage') }}">Sales</a>
                     {% endif %}
-                    <a class="btn btn-default navbar-btn" href="{{ path('itinerary') }}">Itinerary &amp; Floor Plan</a>
+                    <a class="btn btn-default navbar-btn" href="{{ path('itinerary') }}">Itinerary</a>
                     <a class="btn btn-default navbar-btn" href="{{ path('help') }}">Help</a>
                     <span class="hidden-xs hidden-sm navbar-right">
                         <p class="navbar-text">{{ app.request.cookies.get('customerNumber') }}</p>
