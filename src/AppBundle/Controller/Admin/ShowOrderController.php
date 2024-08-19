@@ -151,16 +151,18 @@ class ShowOrderController extends Controller {
         $file = new SplTempFileObject();
         $file->fputcsv([
             'sku',
-            'name',
             'quantity',
+            'name',
+            'price',
             'vendor'
         ]);
 
         foreach ($order->getItems() as $item) {
             $file->fputcsv([
                 $item->getProduct()->getItemNumber(),
-                $item->getProduct()->getName(),
                 $item->getQuantity(),
+                $item->getProduct()->getName(),
+                $item->getProduct()->getPrice() * $item->getQuantity(),
                 $item->getProduct()->getVendor()->getVendorNumber()
             ]);
         }

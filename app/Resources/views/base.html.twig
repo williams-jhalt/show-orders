@@ -45,6 +45,7 @@
                         <span class="icon-bar"></span>
                     </button>
                     <a class="navbar-brand" href="{{ path('homepage') }}">WTC Show</a>
+                    <a class="btn btn-default navbar-btn" href="{{ path('homepage') }}">HOME</a>&nbsp;
                     {% if app.request.cookies.get('customerNumber') %}
                        <a class="btn btn-default navbar-btn" href="{{ path('cart') }}"><i class="glyphicon glyphicon-shopping-cart"></i> Cart</a> &nbsp;
                     {% endif %}                
@@ -57,6 +58,8 @@
                         <a class="btn btn-default navbar-btn" href="{{ path('sales_homepage') }}">Sales</a>
                     {% endif %}
                     <a class="btn btn-default navbar-btn" href="{{ path('itinerary') }}">Itinerary</a>
+                    <!--a class="btn btn-default navbar-btn" href="{{ path('discounts') }}">VIP Discounts</a-->
+                    <!--a class="btn btn-default navbar-btn" href="{{ path('themes') }}">Theme Nights</a-->
                     <a class="btn btn-default navbar-btn" href="{{ path('help') }}">Help</a>
                     <span class="hidden-xs hidden-sm navbar-right">
                         <p class="navbar-text">{{ app.request.cookies.get('customerNumber') }}</p>

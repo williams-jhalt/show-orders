@@ -4,7 +4,14 @@
     {{ parent() }}
     <script type="text/javascript">
         $(document).ready(function() {
-            $('#productTable').DataTable();
+            $('#productTable').DataTable({
+        lengthMenu: [
+            [10, 25, 50, -1],
+            [10, 25, 50, 'All'],
+        ],
+        pagingType: 'full_numbers',
+        stateSave: true,
+    });
             $('#productTable').show();
         });
     </script>
@@ -22,6 +29,7 @@
                 <th>Name</th>
                 <th>Price</th>
                 <th>Vendor</th>
+                <th>Image</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -38,6 +46,13 @@
 						{% else %}
 							<i>This product has not been assigned to a vendor</i>
 						{% endif %}
+                    </td>
+                    <td>
+                        {% if product.imageURL == 'default_product.png' %}
+                            No
+                        {% else %}
+                            Yes
+                        {% endif %}
                     </td>
                     <td>
                         <a class="btn btn-default btn-sm" href="{{ path('product_edit', { 'id': product.id }) }}">edit</a>

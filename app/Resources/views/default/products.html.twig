@@ -74,14 +74,14 @@
 
     <div class="navbar navbar-default">
         <div class="container-fluid">
-            <a class="btn btn-default navbar-btn {% if showAsList %}active{% endif %}" href="{{ path('vendor_order_sheet', {id: vendor.id, showAsList: true}) }}"><i class="glyphicon glyphicon glyphicon-th-list"></i></a>
-            <a class="btn btn-default navbar-btn {% if not showAsList %}active{% endif %}" href="{{ path('vendor_order_sheet', {id: vendor.id, showAsList: false}) }}"><i class="glyphicon glyphicon glyphicon-th"></i></a>
+            <a class="btn btn-default navbar-btn {% if showAsList %}active{% endif %}" href="{{ path('vendor_order_sheet', {id: vendor.id, showAsList: true}) }}"><i class="glyphicon glyphicon glyphicon-th"></i></a>
+            <a class="btn btn-default navbar-btn {% if not showAsList %}active{% endif %}" href="{{ path('vendor_order_sheet', {id: vendor.id, showAsList: false}) }}"><i class="glyphicon glyphicon glyphicon-th-list"></i></a>
         </div>
     </div>
 
     <h3>New Products</h3>
 
-    {% if showAsList %}
+    {% if not showAsList %}
 
         {% include 'default/_product_list.html.twig' with {'products': newProducts, 'active_customer': active_customer} only %}
 
@@ -93,7 +93,7 @@
 
     <h3>Best Sellers</h3>
 
-    {% if showAsList %}
+    {% if not showAsList %}
 
         {% include 'default/_product_list.html.twig' with {'products': bestSellers, 'active_customer': active_customer} only %}
 

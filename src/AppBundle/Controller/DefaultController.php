@@ -56,6 +56,22 @@ class DefaultController extends Controller {
     public function itineraryAction() {
         return $this->render('default/itinerary.html.twig');
     }
+    
+    
+    /**
+     * @Route("/discounts", name="discounts")
+     */
+    public function discountsAction() {
+        return $this->render('default/discounts.html.twig');
+    }
+    
+    
+    /**
+     * @Route("/themes", name="themes")
+     */
+    public function themesAction() {
+        return $this->render('default/themes.html.twig');
+    }
 
     /**
      * @Route("/add-note/{vendorId}", name="add_note")
