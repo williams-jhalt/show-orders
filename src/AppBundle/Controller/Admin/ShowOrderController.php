@@ -189,7 +189,7 @@ class ShowOrderController extends Controller {
     
 
     /**
-     * @Route("/export/all", name="showorder_export_all")
+     * @Route("/export-all/true", name="showorder_export_all")
      */
     public function exportAllAction() {
         
