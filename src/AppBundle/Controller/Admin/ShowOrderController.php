@@ -186,4 +186,57 @@ class ShowOrderController extends Controller {
         return $response;
     }
 
+    
+
+    /**
+     * @Route("/export-all", name="showorder_export_all")
+     */
+    public function exportAllAction() {
+
+        $showOrders = $em->getRepository('AppBundle:ShowOrder')->findAll();        
+
+        $file = new SplTempFileObject();
+        $file->fputcsv([
+            'sku',
+            'quantity',
+            'name',
+            'price',
+            'vendor',
+            'customer'
+        ]);
+
+        foreach ($showOrders as $order) {
+
+            foreach ($order->getItems() as $item) {
+                $file->fputcsv([
+                    $item->getProduct()->getItemNumber(),
+                    $item->getQuantity(),
+                    $item->getProduct()->getName(),
+                    $item->getProduct()->getPrice() * $item->getQuantity(),
+                    $item->getProduct()->getVendor()->getVendorNumber(),
+                    $order->getCustomer()->getCustomerNumber()
+                ]);
+            }
+
+        }
+
+        $file->rewind();
+
+        $response = new StreamedResponse(function() use ($file) {
+            foreach ($file as $line) {
+                echo $line;
+            }
+        });
+        $dispositionHeader = $response->headers->makeDisposition(
+                ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+                "show_orders.csv"
+        );
+        $response->headers->set('Content-Type', 'text/csv; charset=utf-8');
+        $response->headers->set('Pragma', 'public');
+        $response->headers->set('Cache-Control', 'maxage=1');
+        $response->headers->set('Content-Disposition', $dispositionHeader);
+
+        return $response;
+    }
+
 }
