@@ -192,6 +192,8 @@ class ShowOrderController extends Controller {
      * @Route("/export-all", name="showorder_export_all")
      */
     public function exportAllAction() {
+        
+        $em = $this->getDoctrine()->getManager();
 
         $showOrders = $em->getRepository('AppBundle:ShowOrder')->findAll();        
 
