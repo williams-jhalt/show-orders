@@ -204,7 +204,8 @@ class ShowOrderController extends Controller {
             'name',
             'price',
             'vendor',
-            'customer'
+            'customer',
+            'sales_person'
         ]);
 
         foreach ($showOrders as $order) {
@@ -216,7 +217,8 @@ class ShowOrderController extends Controller {
                     $item->getProduct()->getName(),
                     $item->getProduct()->getPrice() * $item->getQuantity(),
                     $item->getProduct()->getVendor()->getVendorNumber(),
-                    $order->getCustomer()->getCustomerNumber()
+                    $order->getCustomer()->getCustomerNumber(),
+                    $order->getCustomer()->getSalesPerson()->getName()
                 ]);
             }
 
