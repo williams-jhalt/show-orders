@@ -22,7 +22,7 @@
           <div class="panel panel-default">
             <div class="panel-body text-center">
               <img src="{{ image('uploads/products/' ~ product.imageUrl).resize(200,200) }}">                  
-              <div class="text-nowrap"><b>{{ product.name }}</b></div>
+              <div style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"><b>{{ product.name }}</b></div>
               <div><b>Item Number:</b> {{ product.itemNumber }}</div>
               <div><b>Price:</b> ${{ product.price|number_format(2) }}</div>
             </div>
@@ -32,6 +32,8 @@
 
     </div>
   </div>
+
+  <div style="break-after: page;"></div>
 
 {% endfor %}
 
