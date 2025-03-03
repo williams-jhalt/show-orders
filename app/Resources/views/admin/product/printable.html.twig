@@ -14,7 +14,7 @@
     <div class="col-sm-4"></div>
   </div>
 
-  <div class="container-fluid">
+  <div class="container">
     <div class="row">
 
     {% for product in vendor.products %}
@@ -22,7 +22,7 @@
           <div class="panel panel-default">
             <div class="panel-body text-center">
               <img src="{{ image('uploads/products/' ~ product.imageUrl).resize(200,200) }}">                  
-              <div style="height:2em;"><b>{{ product.name }}</b></div>
+              <div class="text-nowrap"><b>{{ product.name }}</b></div>
               <div><b>Item Number:</b> {{ product.itemNumber }}</div>
               <div><b>Price:</b> ${{ product.price|number_format(2) }}</div>
             </div>
