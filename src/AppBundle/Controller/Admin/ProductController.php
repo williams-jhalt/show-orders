@@ -48,6 +48,23 @@ class ProductController extends Controller {
     }
 
     /**
+     * Export all products to a printable list
+     *
+     * @Route("/printable", name="product_printable")
+     * @Method("GET")
+     */
+    public function printableAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+
+        $vendors = $em->getRepository('AppBundle:Vendor')->findBy([], ['company' => 'asc']);
+
+        return $this->render('admin/product/printable.html.twig', array(
+            'vendors' => $vendors
+        ));
+        
+    }
+
+    /**
      * @Route("/import", name="product_import")
      * 
      * import file should have the following fields, no header
