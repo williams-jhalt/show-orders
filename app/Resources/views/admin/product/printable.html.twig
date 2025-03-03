@@ -5,34 +5,33 @@
 {% for vendor in vendors %}
 
   <div class="row">
-    <div class="col-sm-8">
+    <div class="col-sm-4"></div>
+    <div class="col-sm-4 text-center">
+      <img src="{{ asset('uploads/vendors/' ~ vendor.imageUrl) }}" class="img-responsive">
+      <br>
       {{ vendor.company }}
     </div>
-    <div class="col-sm-4">
-      <img src="{{ asset('uploads/vendors/' ~ vendor.imageUrl) }}" class="img-responsive">
-    </div>
+    <div class="col-sm-4"></div>
   </div>
 
-  {% for product in vendor.products %}
+  <div class="container">
+    <div class="row">
 
-    <div class="container">
-      <div class="row">
-        <div class="col-sm-2">
-          <img src="{{ image('uploads/products/' ~ product.imageUrl).resize(200,200) }}">
-        </div>
-        <div class="col-sm-2">
-          {{ product.itemNumber }}
-        </div>
-        <div class="col-sm-6">
-          {{ product.name }}
-        </div>
-        <div class="col-sm-2">
-          ${{ product.price|number_format(2) }}
-        </div>
-      </div>
+    {% for product in vendor.products %}
+        <div class="col-sm-4">
+          <div class="panel panel-default">
+            <div class="panel-body text-center">
+              <img src="{{ image('uploads/products/' ~ product.imageUrl).resize(200,200) }}">                  
+              <div><b>{{ product.name }}</b></div>
+              <div><b>Item Number:</b> {{ product.itemNumber }}</div>
+              <div><b>Price:</b> ${{ product.price|number_format(2) }}</div>
+            </div>
+          </div>
+        </div>  
+    {% endfor %}
+
     </div>
-
-  {% endfor %}
+  </div>
 
 {% endfor %}
 
