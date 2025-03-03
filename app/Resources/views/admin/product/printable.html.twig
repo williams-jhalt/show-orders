@@ -1,0 +1,39 @@
+{% extends 'admin/admin.html.twig' %}
+
+{% block body %}
+
+{% for vendor in vendors %}
+
+  <div class="row">
+    <div class="col-sm-8">
+      {{ vendor.company }}
+    </div>
+    <div class="col-sm-4">
+      <img src="{{ asset('uploads/vendors/' ~ vendor.imageUrl) }}" class="img-responsive">
+    </div>
+  </div>
+
+  {% for product in vendor.products %}
+
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-2">
+          <img src="{{ image('uploads/products/' ~ product.imageUrl).resize(200,200) }}">
+        </div>
+        <div class="col-sm-2">
+          {{ product.itemNumber }}
+        </div>
+        <div class="col-sm-6">
+          {{ product.name }}
+        </div>
+        <div class="col-sm-2">
+          ${{ product.price|numberformat(2) }}
+        </div>
+      </div>
+    </div>
+
+  {% endfor %}
+
+{% endfor %}
+
+{% endblock %}
