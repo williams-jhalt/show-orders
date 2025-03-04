@@ -20,13 +20,14 @@
     <div class="row">
 
     {% for product in vendor.products %}
-        <div class="col-xs-4" style="break-after: {{cycle(['auto','auto','page'], loop.index0)}};">
+        <div class="col-xs-4">
           <div class="panel panel-default">
             <div class="panel-body text-center">
               <img src="{{ image('uploads/products/' ~ product.imageUrl).resize(200,200) }}">                  
               <div style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"><b>{{ product.name }}</b></div>
               <div><b>Item Number:</b> {{ product.itemNumber }}</div>
               <div><b>Price:</b> ${{ product.price|number_format(2) }}</div>
+              <br>
             </div>
           </div>
         </div>  
