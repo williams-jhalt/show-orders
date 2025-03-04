@@ -20,7 +20,7 @@
     <div class="row">
 
     {% for product in vendor.products %}
-        <div class="col-xs-4" style="height:3.25in;">
+        <div class="col-xs-4" {{cycle(['','','style="break-after:page;"'], loop.index0)}}>
           <div class="panel panel-default">
             <div class="panel-body text-center">
               <img src="{{ image('uploads/products/' ~ product.imageUrl).resize(200,200) }}">                  
