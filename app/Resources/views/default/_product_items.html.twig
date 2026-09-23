@@ -10,7 +10,7 @@
                 </div>
 
                 <div class="panel-body text-center">
-                    <img src="{{ image('uploads/products/' ~ item.imageUrl).resize(200,200) }}">
+                    <a href="{{ image('uploads/products/' ~ item.imageUrl) }}" target="_blank"><img src="{{ image('uploads/products/' ~ item.imageUrl).resize(200,200) }}"></a>
                     <table class="table table-condensed">
                         <tr><th>Item Number</th><td>{{ item.itemNumber }}</td></tr>
                         <tr><th>Price</th><td>${{ item.price|number_format(2) }}</td></tr>
